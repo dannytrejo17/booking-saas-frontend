@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { login } from "../services/authService";
 import "./Login.css";
 
 function Login(){
@@ -13,25 +14,7 @@ function Login(){
         setError("");
 
         try{
-            const response = await fetch("http://localhost:8080/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            });
-
-            if(!response.ok){
-                throw new Error(`Login falló (${response.status}): ${await response.text()}`);
-            }
-
-            const data = await response.json();
-            const token = data.token;
-
-            if (!token) {
-                throw new Error("El backend respondió OK pero no devolvió token");
-            }
-
+            const token = await login(email, password);
             localStorage.setItem("token", token);
             navigate("/");
         } catch (error) {
