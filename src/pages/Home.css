@@ -1,0 +1,142 @@
+.home-page {
+    min-height: 100vh;
+    background: #f9fafb;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    color: #111827;
+}
+
+.home-hero {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 4rem 2rem 5rem;
+    text-align: center;
+}
+
+.home-badge {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.home-hero h1 {
+    margin: 0 auto 1.25rem;
+    max-width: 780px;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+}
+
+.home-hero h1 span {
+    color: #4338ca;
+}
+
+.home-hero p {
+    margin: 0 auto 2rem;
+    max-width: 620px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #4b5563;
+}
+
+.home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.home-btn-primary,
+.home-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.4rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.home-btn-primary {
+    border: none;
+    background: #4338ca;
+    color: #ffffff;
+}
+
+.home-btn-primary:hover {
+    background: #3730a3;
+    box-shadow: 0 4px 14px rgba(67, 56, 202, 0.35);
+}
+
+.home-btn-secondary {
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+}
+
+.home-btn-secondary:hover {
+    background: #f9fafb;
+}
+
+.home-features {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.home-feature {
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.home-feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 1.1rem;
+}
+
+.home-feature h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.home-feature p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #6b7280;
+}
+
+@media (max-width: 640px) {
+    .home-hero {
+        padding: 3rem 1.25rem 4rem;
+    }
+
+    .home-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
