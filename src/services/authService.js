@@ -36,3 +36,13 @@ export async function register(name, email, password) {
     const data = await response.json();
     return data;
 }
+
+export function getToken(){
+    return localStorage.getItem("token");
+}
+
+
+
+export function logout() {
+    localStorage.removeItem("token");
+}

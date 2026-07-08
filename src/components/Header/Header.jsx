@@ -1,13 +1,24 @@
 import { useNavigate } from "react-router-dom";
+import { getToken, logout } from "../../services/authService";
+
 
 function Header() {
-
     const navigate = useNavigate();
+    const token = getToken();
+
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    }
 
     return (
-        <button onClick={() => navigate("/login")}>
-            Iniciar sesión
-        </button>
+        <div>
+            {token ? (
+                <button onClick={handleLogout}>Cerrar sesión</button>
+            ) : (
+                <button onClick={() => navigate("/login")}>Iniciar sesión</button>
+            )}
+        </div>
     );
 }
 
