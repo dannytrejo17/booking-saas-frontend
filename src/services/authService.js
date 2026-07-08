@@ -10,7 +10,11 @@ export async function login(email, password) {
     });
 
     if (!response.ok) {
-        throw new Error(`Login falló (${response.status}): ${await response.text()}`);
+        if (response.status === 401) {
+            throw new Error("Credenciales incorrectas");
+        }
+        const message = await response.text();
+        throw new Error(message || "No se pudo iniciar sesión");
     }
 
     const data = await response.json();
@@ -56,6 +60,8 @@ export async function getMe() {
     }
     return response.json();
 }
+
+
 
 
 export async function createBusiness(data) {
