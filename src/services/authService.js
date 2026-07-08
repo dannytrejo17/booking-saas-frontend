@@ -39,6 +39,39 @@ export async function register(name, email, password) {
     return data;
 }
 
+function authHeaders() {                    
+    return {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`
+    };
+}
+
+
+export async function getMe() {
+    const response = await fetch(`${API_URL}/api/me`, {
+        headers: authHeaders()
+    });
+    if (!response.ok) {
+        throw new Error("No se pudo obtener el usuario");
+    }
+    return response.json();
+}
+
+
+export async function createBusiness(data) {
+
+    const response = await fetch(`${API_URL}/api/business/create`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+    return response.json();
+}
+
+
 export function getToken(){
     return localStorage.getItem("token");
 }
