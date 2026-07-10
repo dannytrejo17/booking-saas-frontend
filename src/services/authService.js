@@ -43,6 +43,8 @@ export async function register(name, email, password) {
     return data;
 }
 
+
+
 function authHeaders() {                    
     return {
         "Content-Type": "application/json",
@@ -62,6 +64,15 @@ export async function getMe() {
 }
 
 
+export async function getServices() {
+    const response = await fetch(`${API_URL}/api/services`, {
+        headers: authHeaders()
+    });
+    if (!response.ok) {
+        throw new Error("No se pudieron cargar los servicios");
+    }
+    return response.json();
+}
 
 
 export async function createBusiness(data) {
@@ -77,6 +88,50 @@ export async function createBusiness(data) {
     return response.json();
 }
 
+
+export async function createService(data) {
+    const response = await fetch(`${API_URL}/api/services`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+    return response.text();
+}
+
+export async function getEmployees() {
+    const response = await fetch(`${API_URL}/api/employees`, {
+        headers: authHeaders()
+    });
+    if (!response.ok) {
+        throw new Error("No se pudieron cargar los empleados");
+    }
+    return response.json();
+}
+
+export async function createEmployee(name) {
+    const response = await fetch(`${API_URL}/api/employees`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ name, active: true })
+    });
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+    return response.text();
+}
+
+export async function getBookings() {
+    const response = await fetch(`${API_URL}/api/bookings`, {
+        headers: authHeaders()
+    });
+    if (!response.ok) {
+        throw new Error("No se pudieron cargar las reservas");
+    }
+    return response.json();
+}
 
 export function getToken(){
     return localStorage.getItem("token");
