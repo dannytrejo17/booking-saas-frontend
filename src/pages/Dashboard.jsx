@@ -8,6 +8,7 @@ import {
     getEmployees,
     createEmployee,
     getBookings,
+    createBooking,
 } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
@@ -26,6 +27,12 @@ function Dashboard() {
     const [employees, setEmployees] = useState([]);
     const [employeeName, setEmployeeName] = useState("");
     const [bookings, setBookings] = useState([]);
+    const [bookingServiceId, setBookingServiceId] = useState("");
+    const [bookingEmployeeId, setBookingEmployeeId] = useState("");
+    const [bookingStartAt, setBookingStartAt] = useState("");
+    const [customerName, setCustomerName] = useState("");
+    const [customerPhone, setCustomerPhone] = useState("");
+
     const navigate = useNavigate();
 
     const handleCreateBusiness = async (e) => {
@@ -75,6 +82,47 @@ function Dashboard() {
         }
     };
 
+
+    const handleCreateBooking = async (e) => {
+        e.preventDefault();
+
+        try {
+            await createBooking({
+                serviceId: Number(bookingServiceId),
+                employeeId: Number(bookingEmployeeId),
+                startAt: bookingStartAt,
+                customerName,
+                customerPhone,
+            });
+
+            const data = await getBookings();
+            setBookings(data);
+
+            setBookingServiceId("");
+            setBookingEmployeeId("");
+            setBookingStartAt("");
+            setCustomerName("");
+            setCustomerPhone("");
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    useEffect(() => {
+        if (active !== "reservas") return;
+    
+        const fetchData = async () => {
+            const bookingsData = await getBookings();
+            const servicesData = await getServices();
+            const employeesData = await getEmployees();
+            setBookings(bookingsData);
+            setServices(servicesData);
+            setEmployees(employeesData);
+        };
+        fetchData();
+    }, [active]);
+
+
     useEffect(() => {
         if (active !== "empleados") return;
     
@@ -84,19 +132,6 @@ function Dashboard() {
         };
         fetchEmployees();
     }, [active]);
-
-
-
-    useEffect(() => {
-        if (active !== "reservas") return;
-    
-        const fetchBookings = async () => {
-            const data = await getBookings();
-            setBookings(data);
-        };
-        fetchBookings();
-    }, [active]);
-
 
 
     useEffect(() => {
@@ -197,12 +232,12 @@ function Dashboard() {
                     </button>
 
                     <button
-    className={`sidebar-btn ${active === "reservas" ? "active" : ""}`}
-    onClick={() => setActive("reservas")}
->
-    <span className="sidebar-btn-icon">📅</span>
-    Reservas
-</button>
+                        className={`sidebar-btn ${active === "reservas" ? "active" : ""}`}
+                        onClick={() => setActive("reservas")}
+                    >
+                        <span className="sidebar-btn-icon">📅</span>
+                        Reservas
+                    </button>
                 </nav>
 
                 <div className="sidebar-footer">
@@ -316,25 +351,72 @@ function Dashboard() {
                     )}
 
 
-{active === "reservas" && (
-    <div>
-        <h2>Reservas</h2>
+                    {active === "reservas" && (
+                        <div>
+                            <h2>Reservas</h2>
 
-        {bookings.length === 0 && (
-            <p>No hay reservas todavía</p>
-        )}
+                            <form onSubmit={handleCreateBooking}>
+                                <select
+                                    value={bookingServiceId}
+                                    onChange={(e) => setBookingServiceId(e.target.value)}
+                                >
+                                    <option value="">Selecciona servicio</option>
+                                    {services.map((service) => (
+                                        <option key={service.id} value={service.id}>
+                                            {service.name}
+                                        </option>
+                                    ))}
+                                </select>
 
-        {bookings.map((booking) => (
-            <div key={booking.id} className="dash-card">
-                <p><strong>{booking.customerName}</strong></p>
-                <p>Servicio: {booking.serviceName}</p>
-                <p>Empleado: {booking.employeeName}</p>
-                <p>Fecha: {booking.startAt}</p>
-                <p>Tel: {booking.customerPhone}</p>
-            </div>
-        ))}
-    </div>
-)}
+                                <select
+                                    value={bookingEmployeeId}
+                                    onChange={(e) => setBookingEmployeeId(e.target.value)}
+                                >
+                                    <option value="">Selecciona empleado</option>
+                                    {employees.map((employee) => (
+                                        <option key={employee.id} value={employee.id}>
+                                            {employee.name}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <input
+                                    type="datetime-local"
+                                    value={bookingStartAt}
+                                    onChange={(e) => setBookingStartAt(e.target.value)}
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Nombre del cliente"
+                                    value={customerName}
+                                    onChange={(e) => setCustomerName(e.target.value)}
+                                />
+                                <input
+                                    type="tel"
+                                    placeholder="Teléfono del cliente"
+                                    value={customerPhone}
+                                    onChange={(e) => setCustomerPhone(e.target.value)}
+                                />
+                                <button type="submit">Crear reserva</button>
+                            </form>
+
+                            {error && <p>{error}</p>}
+
+                            {bookings.length === 0 && (
+                                <p>No hay reservas todavía</p>
+                            )}
+
+                            {bookings.map((booking) => (
+                                <div key={booking.id} className="dash-card">
+                                    <p><strong>{booking.customerName}</strong></p>
+                                    <p>Servicio: {booking.serviceName}</p>
+                                    <p>Empleado: {booking.employeeName}</p>
+                                    <p>Fecha: {booking.startAt}</p>
+                                    <p>Tel: {booking.customerPhone}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </section>
             </main>
         </div>

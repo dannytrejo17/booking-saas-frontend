@@ -133,6 +133,20 @@ export async function getBookings() {
     return response.json();
 }
 
+
+export async function createBooking(data) {
+    const response = await fetch(`${API_URL}/api/bookings`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+    return response.text();
+}
+
+
 export function getToken(){
     return localStorage.getItem("token");
 }
