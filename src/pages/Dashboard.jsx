@@ -98,6 +98,7 @@ function Dashboard() {
             const data = await getBookings();
             setBookings(data);
 
+            setError("");
             setBookingServiceId("");
             setBookingEmployeeId("");
             setBookingStartAt("");
@@ -107,6 +108,22 @@ function Dashboard() {
             setError(err.message);
         }
     };
+
+    useEffect(() => {
+        if (active !== "resumen") return;
+
+        const fetchSummary = async () => {
+            const [servicesData, employeesData, bookingsData] = await Promise.all([
+                getServices(),
+                getEmployees(),
+                getBookings(),
+            ]);
+            setServices(servicesData);
+            setEmployees(employeesData);
+            setBookings(bookingsData);
+        };
+        fetchSummary();
+    }, [active]);
 
     useEffect(() => {
         if (active !== "reservas") return;
@@ -197,6 +214,24 @@ function Dashboard() {
         navigate("/login");
     };
 
+    const todayLocal = (() => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    })();
+
+    const todayBookingsCount = bookings.filter((booking) => {
+        if (!booking.startAt) return false;
+        const bookingDate = booking.startAt.slice(0, 10);
+        return bookingDate === todayLocal;
+    }).length;
+
+    const sortedBookings = [...bookings].sort((a, b) =>
+        (a.startAt || "").localeCompare(b.startAt || "")
+    );
+
     return (
         <div className="dashboard">
             <aside className="sidebar">
@@ -264,28 +299,63 @@ function Dashboard() {
 
                 <section className="dashboard-content">
                     {active === "resumen" && (
-                        <div className="dash-cards">
-                            <div className="dash-card">
-                                <span className="dash-card-label">Negocio</span>
-                                <span className="dash-card-value">{user.business.name}</span>
+                        <div className="dash-section">
+                            <div className="dash-cards">
+                                <div className="dash-card">
+                                    <span className="dash-card-label">Negocio</span>
+                                    <span className="dash-card-value">{user.business.name}</span>
+                                </div>
+                                <div className="dash-card">
+                                    <span className="dash-card-label">Email</span>
+                                    <span className="dash-card-value">{user.business.email}</span>
+                                </div>
+                                <div className="dash-card">
+                                    <span className="dash-card-label">URL pública</span>
+                                    <span className="dash-card-value">/reservar/{user.business.slug}</span>
+                                </div>
                             </div>
-                            <div className="dash-card">
-                                <span className="dash-card-label">Email</span>
-                                <span className="dash-card-value">{user.business.email}</span>
+
+                            <div className="dash-summary-actions">
+                                <a
+                                    href={`/reservar/${user.business.slug}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="dash-public-btn"
+                                >
+                                    Abrir mi página de reservas
+                                </a>
+                                <p className="dash-public-url">
+                                    {window.location.origin}/reservar/{user.business.slug}
+                                </p>
                             </div>
-                            <div className="dash-card">
-                                <span className="dash-card-label">URL pública</span>
-                                <span className="dash-card-value">/{user.business.slug}</span>
+
+                            <div className="dash-stats">
+                                <div className="dash-stat-card">
+                                    <span className="dash-stat-value">{services.length}</span>
+                                    <span className="dash-stat-label">Servicios</span>
+                                </div>
+                                <div className="dash-stat-card">
+                                    <span className="dash-stat-value">{employees.length}</span>
+                                    <span className="dash-stat-label">Empleados</span>
+                                </div>
+                                <div className="dash-stat-card">
+                                    <span className="dash-stat-value">{bookings.length}</span>
+                                    <span className="dash-stat-label">Reservas</span>
+                                </div>
+                                <div className="dash-stat-card">
+                                    <span className="dash-stat-value">{todayBookingsCount}</span>
+                                    <span className="dash-stat-label">Hoy</span>
+                                </div>
                             </div>
                         </div>
                     )}
 
 
                     {active === "servicios" && (
-                        <div>
-                            <h2>Servicios</h2>
+                        <div className="dash-section">
+                            <h2 className="dash-section-title">Servicios</h2>
 
-                            <form onSubmit={handleCreateService}>
+                            <form className="dash-form" onSubmit={handleCreateService}>
                                 <input
                                     type="text"
                                     placeholder="Nombre del servicio"
@@ -294,7 +364,7 @@ function Dashboard() {
                                 />
                                 <input
                                     type="number"
-                                    placeholder="Precio"
+                                    placeholder="Precio (€)"
                                     value={servicePrice}
                                     onChange={(e) => setServicePrice(e.target.value)}
                                 />
@@ -308,26 +378,28 @@ function Dashboard() {
                             </form>
 
                             {services.length === 0 && (
-                                <p>No hay servicios todavía</p>
+                                <p className="dash-empty">No hay servicios todavía</p>
                             )}
 
-                            {services.map((service) => (
-                                <div key={service.id} className="dash-card">
-                                    <p><strong>{service.name}</strong></p>
-                                    <p>Precio: {service.price} €</p>
-                                    <p>Duración: {service.duration} min</p>
-                                </div>
-                            ))}
+                            <div className="dash-service-grid">
+                                {services.map((service) => (
+                                    <div key={service.id} className="dash-service-card">
+                                        <h3>{service.name}</h3>
+                                        <p className="dash-service-price">{service.price} €</p>
+                                        <p className="dash-service-duration">{service.duration} min</p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
 
 
                     {active === "empleados" && (
-                        <div>
-                            <h2>Empleados</h2>
+                        <div className="dash-section">
+                            <h2 className="dash-section-title">Empleados</h2>
 
-                            <form onSubmit={handleCreateEmployee}>
+                            <form className="dash-form dash-form-inline" onSubmit={handleCreateEmployee}>
                                 <input
                                     type="text"
                                     placeholder="Nombre del empleado"
@@ -338,24 +410,31 @@ function Dashboard() {
                             </form>
 
                             {employees.length === 0 && (
-                                <p>No hay empleados todavía</p>
+                                <p className="dash-empty">No hay empleados todavía</p>
                             )}
 
-                            {employees.map((employee) => (
-                                <div key={employee.id} className="dash-card">
-                                    <p><strong>{employee.name}</strong></p>
-                                    <p>{employee.active ? "Activo" : "Inactivo"}</p>
-                                </div>
-                            ))}
+                            <div className="dash-employee-grid">
+                                {employees.map((employee) => (
+                                    <div key={employee.id} className="dash-employee-card">
+                                        <div className="dash-employee-avatar">
+                                            {employee.name.charAt(0).toUpperCase()}
+                                        </div>
+                                        <h3>{employee.name}</h3>
+                                        <span className={`dash-employee-status ${employee.active ? "active" : ""}`}>
+                                            {employee.active ? "Activo" : "Inactivo"}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
 
                     {active === "reservas" && (
-                        <div>
-                            <h2>Reservas</h2>
+                        <div className="dash-section">
+                            <h2 className="dash-section-title">Reservas</h2>
 
-                            <form onSubmit={handleCreateBooking}>
+                            <form className="dash-form dash-form-booking" onSubmit={handleCreateBooking}>
                                 <select
                                     value={bookingServiceId}
                                     onChange={(e) => setBookingServiceId(e.target.value)}
@@ -400,21 +479,29 @@ function Dashboard() {
                                 <button type="submit">Crear reserva</button>
                             </form>
 
-                            {error && <p>{error}</p>}
+                            {error && <p className="dash-error">{error}</p>}
 
                             {bookings.length === 0 && (
-                                <p>No hay reservas todavía</p>
+                                <p className="dash-empty">No hay reservas todavía</p>
                             )}
 
-                            {bookings.map((booking) => (
-                                <div key={booking.id} className="dash-card">
-                                    <p><strong>{booking.customerName}</strong></p>
-                                    <p>Servicio: {booking.serviceName}</p>
-                                    <p>Empleado: {booking.employeeName}</p>
-                                    <p>Fecha: {booking.startAt}</p>
-                                    <p>Tel: {booking.customerPhone}</p>
-                                </div>
-                            ))}
+                            <div className="dash-booking-grid">
+                                {sortedBookings.map((booking) => (
+                                    <div key={booking.id} className="dash-booking-card">
+                                        <h3>{booking.customerName}</h3>
+                                        <div className="dash-booking-details">
+                                            <p><span>Servicio</span>{booking.serviceName}</p>
+                                            <p><span>Empleado</span>{booking.employeeName}</p>
+                                            <p><span>Fecha</span>
+  {new Date(booking.startAt).toLocaleString("es-ES", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  })}</p>
+                                            <p><span>Teléfono</span>{booking.customerPhone}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </section>
