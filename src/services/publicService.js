@@ -34,6 +34,25 @@ export async function getPublicEmployees(slug) {
 }
 
 
+export async function getAvailability(slug, serviceId, employeeId, date) {
+    const params = new URLSearchParams({
+        serviceId: String(serviceId),
+        employeeId: String(employeeId),
+        date,
+    });
+
+    const response = await fetch(
+        `${API_URL}/api/public/${slug}/bookings/availability?${params}`
+    );
+
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+
+    return response.json();
+}
+
+
 export async function createPublicBooking(slug, data) {
     const response = await fetch(`${API_URL}/api/public/${slug}/bookings`, {
         method: "POST",
