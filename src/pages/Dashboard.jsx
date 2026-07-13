@@ -13,6 +13,8 @@ import {
     deleteBooking,
     createSchedule,
     getSchedule,
+    editService,
+    deleteService,
 } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
@@ -41,6 +43,7 @@ function Dashboard() {
     const [scheduleDay, setScheduleDay] = useState("");
     const [scheduleOpen, setScheduleOpen] = useState("");
     const [scheduleClose, setScheduleClose] = useState("");
+    const [editingServiceId, setEditingServiceId] = useState(null);
 
 
     const navigate = useNavigate();
@@ -75,22 +78,59 @@ function Dashboard() {
     };
 
 
-    const handleCreateService = async (e) => {
+    const handleSubmitService = async (e) => {
         e.preventDefault();
     
         try {
-            await createService({
+
+            if(editingServiceId) {
+            await editService(editingServiceId, {
                 name: serviceName,
                 price: Number(servicePrice),
                 duration: Number(serviceDuration)
             });
     
-            const data = await getServices();
+        }else 
+        await createService({
+            name: serviceName,
+            price: Number(servicePrice),
+            duration: Number(serviceDuration)
+        });
+
+
+        const data = await getServices();
             setServices(data);
     
             setServiceName("");
             setServicePrice("");
             setServiceDuration("");
+            setEditingServiceId(null);
+            setError("");
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const handleStartEditService = (service) => {
+        setEditingServiceId(service.id);
+        setServiceName(service.name);
+        setServicePrice(String(service.price));
+        setServiceDuration(String(service.duration));
+        setError("");
+    };
+
+    const handleDeleteService = async (id) => {
+        try {
+            await deleteService(id);
+            const data = await getServices();
+            setServices(data);
+            setError("");
+            if (editingServiceId === id) {
+                setServiceName("");
+                setServicePrice("");
+                setServiceDuration("");
+                setEditingServiceId(null);
+            }
         } catch (err) {
             setError(err.message);
         }
@@ -488,7 +528,7 @@ function Dashboard() {
                         <div className="dash-section">
                             <h2 className="dash-section-title">Servicios</h2>
 
-                            <form className="dash-form" onSubmit={handleCreateService}>
+                            <form className="dash-form" onSubmit={handleSubmitService}>
                                 <input
                                     type="text"
                                     placeholder="Nombre del servicio"
@@ -520,6 +560,16 @@ function Dashboard() {
                                         <h3>{service.name}</h3>
                                         <p className="dash-service-price">{service.price} €</p>
                                         <p className="dash-service-duration">{service.duration} min</p>
+                                        <button
+                                        type="button"
+                                        className="dash-btn-edit"
+                                        onClick={() => handleStartEditService(service)}
+                                        > editar</button>
+                                        <button
+                                        type="button"
+                                        className="dash-btn-delete"
+                                        onClick={() => handleDeleteService(service.id)}
+                                        > eliminar</button>
                                     </div>
                                 ))}
                             </div>
