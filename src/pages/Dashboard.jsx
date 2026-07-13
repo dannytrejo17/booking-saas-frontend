@@ -11,6 +11,8 @@ import {
     createBooking,
     editBooking,
     deleteBooking,
+    createSchedule,
+    getSchedule,
 } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
@@ -35,6 +37,11 @@ function Dashboard() {
     const [customerName, setCustomerName] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
     const [editingBookingId, setEditingBookingId] = useState(null);
+    const [schedule, setSchedule] = useState([]);
+    const [scheduleDay, setScheduleDay] = useState("");
+    const [scheduleOpen, setScheduleOpen] = useState("");
+    const [scheduleClose, setScheduleClose] = useState("");
+
 
     const navigate = useNavigate();
 
@@ -221,6 +228,45 @@ function Dashboard() {
         fetchServices();
     }, [active]);
 
+
+    const handleCreateSchedule = async (e) => {
+        e.preventDefault();
+
+        if (!scheduleDay || !scheduleOpen || !scheduleClose) {
+            setError("Completa día, apertura y cierre");
+            return;
+        }
+
+        try {
+            await createSchedule({
+                dayOfWeek: scheduleDay,
+                openTime: scheduleOpen,
+                closeTime: scheduleClose,
+            });
+
+            const data = await getSchedule();
+            setSchedule(data);
+            setScheduleDay("");
+            setScheduleOpen("");
+            setScheduleClose("");
+            setError("");
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+
+    useEffect(() => {
+        if (active !== "horarios") return;
+    
+        const fetchSchedule = async () => {
+            const data = await getSchedule();
+            setSchedule(data);
+        };
+        fetchSchedule();
+    }, [active]);
+
+
     if (!user) {
         return <div className="dash-loading">Cargando...</div>;
     }
@@ -284,6 +330,34 @@ function Dashboard() {
         (a.startAt || "").localeCompare(b.startAt || "")
     );
 
+    const dayLabels = {
+        MONDAY: "Lunes",
+        TUESDAY: "Martes",
+        WEDNESDAY: "Miércoles",
+        THURSDAY: "Jueves",
+        FRIDAY: "Viernes",
+        SATURDAY: "Sábado",
+        SUNDAY: "Domingo",
+    };
+
+    const dayOrder = [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY",
+    ];
+
+    const scheduleByDay = schedule.reduce((acc, item) => {
+        if (!acc[item.dayOfWeek]) {
+            acc[item.dayOfWeek] = [];
+        }
+        acc[item.dayOfWeek].push(item);
+        return acc;
+    }, {});
+
     return (
         <div className="dashboard">
             <aside className="sidebar">
@@ -324,6 +398,13 @@ function Dashboard() {
                     >
                         <span className="sidebar-btn-icon">📅</span>
                         Reservas
+                    </button>
+                    <button
+                        className={`sidebar-btn ${active === "horarios" ? "active" : ""}`}
+                        onClick={() => setActive("horarios")}
+                    >
+                        <span className="sidebar-btn-icon">🕐</span>
+                        Horarios
                     </button>
                 </nav>
 
@@ -580,6 +661,64 @@ function Dashboard() {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {active === "horarios" && (
+                        <div className="dash-section">
+                            <h2 className="dash-section-title">Horarios</h2>
+
+                            <form className="dash-form" onSubmit={handleCreateSchedule}>
+                                <select
+                                    value={scheduleDay}
+                                    onChange={(e) => setScheduleDay(e.target.value)}
+                                >
+                                    <option value="">Selecciona día</option>
+                                    <option value="MONDAY">Lunes</option>
+                                    <option value="TUESDAY">Martes</option>
+                                    <option value="WEDNESDAY">Miércoles</option>
+                                    <option value="THURSDAY">Jueves</option>
+                                    <option value="FRIDAY">Viernes</option>
+                                    <option value="SATURDAY">Sábado</option>
+                                    <option value="SUNDAY">Domingo</option>
+                                </select>
+                                <input
+                                    type="time"
+                                    value={scheduleOpen}
+                                    onChange={(e) => setScheduleOpen(e.target.value)}
+                                />
+                                <input
+                                    type="time"
+                                    value={scheduleClose}
+                                    onChange={(e) => setScheduleClose(e.target.value)}
+                                />
+                                <button type="submit">Añadir horario</button>
+                            </form>
+
+                            {error && <p className="dash-error">{error}</p>}
+
+                            {schedule.length === 0 && (
+                                <p className="dash-empty">No hay horarios todavía</p>
+                            )}
+
+                            <div className="dash-service-grid">
+                                {dayOrder
+                                    .filter((day) => scheduleByDay[day]?.length)
+                                    .map((day) => (
+                                        <div key={day} className="dash-service-card">
+                                            <h3>{dayLabels[day]}</h3>
+                                            {scheduleByDay[day]
+                                                .sort((a, b) =>
+                                                    (a.openTime || "").localeCompare(b.openTime || "")
+                                                )
+                                                .map((item) => (
+                                                    <p key={item.id} className="dash-service-duration">
+                                                        {item.openTime?.slice(0, 5)} - {item.closeTime?.slice(0, 5)}
+                                                    </p>
+                                                ))}
+                                        </div>
+                                    ))}
                             </div>
                         </div>
                     )}

@@ -173,6 +173,31 @@ export async function deleteBooking(id) {
     return response.text();
 }
 
+export async function createSchedule(data){
+    const response = await fetch(`${API_URL}/api/schedule`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+    return response.text();
+}
+
+export async function getSchedule(){
+    const response = await fetch(`${API_URL}/api/schedule`, {
+        headers: authHeaders()
+    });
+    if (!response.ok) {
+        throw new Error("No se pudieron cargar las horarios");
+    }
+    return response.json();
+}
+
+
+
+
 
 export function getToken(){
     return localStorage.getItem("token");
