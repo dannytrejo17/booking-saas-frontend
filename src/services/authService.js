@@ -101,6 +101,8 @@ export async function createService(data) {
     return response.text();
 }
 
+
+
 export async function getEmployees() {
     const response = await fetch(`${API_URL}/api/employees`, {
         headers: authHeaders()
@@ -139,6 +141,31 @@ export async function createBooking(data) {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+    return response.text();
+}
+
+
+export async function editBooking(id, data) {
+    const response = await fetch(`${API_URL}/api/bookings/${id}`, {
+        method: "PUT",
+        headers: authHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+    return response.text();
+}
+
+
+export async function deleteBooking(id) {
+    const response = await fetch(`${API_URL}/api/bookings/${id}`, {
+        method: "DELETE",
+        headers: authHeaders()
     });
     if (!response.ok) {
         throw new Error(await response.text());

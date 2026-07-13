@@ -9,6 +9,8 @@ import {
     createEmployee,
     getBookings,
     createBooking,
+    editBooking,
+    deleteBooking,
 } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
@@ -32,8 +34,26 @@ function Dashboard() {
     const [bookingStartAt, setBookingStartAt] = useState("");
     const [customerName, setCustomerName] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
+    const [editingBookingId, setEditingBookingId] = useState(null);
 
     const navigate = useNavigate();
+
+    const clearBookingForm = () => {
+        setBookingServiceId("");
+        setBookingEmployeeId("");
+        setBookingStartAt("");
+        setCustomerName("");
+        setCustomerPhone("");
+        setEditingBookingId(null);
+    };
+
+    const getBookingPayload = () => ({
+        serviceId: Number(bookingServiceId),
+        employeeId: Number(bookingEmployeeId),
+        startAt: bookingStartAt,
+        customerName,
+        customerPhone,
+    });
 
     const handleCreateBusiness = async (e) => {
         e.preventDefault();
@@ -69,6 +89,7 @@ function Dashboard() {
         }
     };
 
+
     const handleCreateEmployee = async (e) => {
         e.preventDefault();
 
@@ -83,27 +104,58 @@ function Dashboard() {
     };
 
 
-    const handleCreateBooking = async (e) => {
+    const handleSubmitBooking = async (e) => {
         e.preventDefault();
 
         try {
-            await createBooking({
-                serviceId: Number(bookingServiceId),
-                employeeId: Number(bookingEmployeeId),
-                startAt: bookingStartAt,
-                customerName,
-                customerPhone,
-            });
+            const payload = getBookingPayload();
+
+            if (editingBookingId) {
+                await editBooking(editingBookingId, payload);
+            } else {
+                await createBooking(payload);
+            }
 
             const data = await getBookings();
             setBookings(data);
-
             setError("");
-            setBookingServiceId("");
-            setBookingEmployeeId("");
-            setBookingStartAt("");
-            setCustomerName("");
-            setCustomerPhone("");
+            clearBookingForm();
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const handleStartEdit = (booking) => {
+        const serviceId =
+            booking.serviceId ??
+            services.find((s) => s.name === booking.serviceName)?.id;
+        const employeeId =
+            booking.employeeId ??
+            employees.find((e) => e.name === booking.employeeName)?.id;
+
+        setEditingBookingId(booking.id);
+        setBookingServiceId(serviceId != null ? String(serviceId) : "");
+        setBookingEmployeeId(employeeId != null ? String(employeeId) : "");
+        setBookingStartAt(booking.startAt ? booking.startAt.slice(0, 16) : "");
+        setCustomerName(booking.customerName || "");
+        setCustomerPhone(booking.customerPhone || "");
+        setError("");
+    };
+
+    const handleCancelEdit = () => {
+        clearBookingForm();
+        setError("");
+    };
+
+    const handleDeleteBooking = async (id) => {
+        try {
+            await deleteBooking(id);
+            const data = await getBookings();
+            setBookings(data);
+            setError("");
+            if (editingBookingId === id) {
+                clearBookingForm();
+            }
         } catch (err) {
             setError(err.message);
         }
@@ -434,7 +486,7 @@ function Dashboard() {
                         <div className="dash-section">
                             <h2 className="dash-section-title">Reservas</h2>
 
-                            <form className="dash-form dash-form-booking" onSubmit={handleCreateBooking}>
+                            <form className="dash-form dash-form-booking" onSubmit={handleSubmitBooking}>
                                 <select
                                     value={bookingServiceId}
                                     onChange={(e) => setBookingServiceId(e.target.value)}
@@ -476,7 +528,16 @@ function Dashboard() {
                                     value={customerPhone}
                                     onChange={(e) => setCustomerPhone(e.target.value)}
                                 />
-                                <button type="submit">Crear reserva</button>
+                                <div className="dash-form-actions">
+                                    <button type="submit">
+                                        {editingBookingId ? "Guardar cambios" : "Crear reserva"}
+                                    </button>
+                                    {editingBookingId && (
+                                        <button type="button" className="dash-btn-secondary" onClick={handleCancelEdit}>
+                                            Cancelar
+                                        </button>
+                                    )}
+                                </div>
                             </form>
 
                             {error && <p className="dash-error">{error}</p>}
@@ -492,12 +553,30 @@ function Dashboard() {
                                         <div className="dash-booking-details">
                                             <p><span>Servicio</span>{booking.serviceName}</p>
                                             <p><span>Empleado</span>{booking.employeeName}</p>
-                                            <p><span>Fecha</span>
-  {new Date(booking.startAt).toLocaleString("es-ES", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  })}</p>
+                                            <p>
+                                                <span>Fecha</span>
+                                                {new Date(booking.startAt).toLocaleString("es-ES", {
+                                                    dateStyle: "medium",
+                                                    timeStyle: "short",
+                                                })}
+                                            </p>
                                             <p><span>Teléfono</span>{booking.customerPhone}</p>
+                                        </div>
+                                        <div className="dash-booking-actions">
+                                            <button
+                                                type="button"
+                                                className="dash-btn-edit"
+                                                onClick={() => handleStartEdit(booking)}
+                                            >
+                                                Editar
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="dash-btn-delete"
+                                                onClick={() => handleDeleteBooking(booking.id)}
+                                            >
+                                                Eliminar
+                                            </button>
                                         </div>
                                     </div>
                                 ))}

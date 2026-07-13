@@ -556,8 +556,72 @@
 }
 
 .dash-form-booking button {
-    grid-column: 1 / -1;
+    grid-column: auto;
     justify-self: start;
+}
+
+.dash-form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.dash-btn-secondary {
+    padding: 0.8rem 1.25rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dash-btn-secondary:hover {
+    background: #f8fafc;
+}
+
+.dash-booking-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.dash-btn-edit,
+.dash-btn-delete {
+    flex: 1;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.dash-btn-edit {
+    border: 1px solid #c7d2fe;
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.dash-btn-edit:hover {
+    background: #e0e7ff;
+}
+
+.dash-btn-delete {
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.dash-btn-delete:hover {
+    background: #fee2e2;
 }
 
 .dash-error {
