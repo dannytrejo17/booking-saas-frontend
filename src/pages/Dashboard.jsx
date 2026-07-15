@@ -6,17 +6,16 @@ import {
     getServices,
     createService,
     getEmployees,
-    createEmployee,
     getBookings,
     createBooking,
     editBooking,
     deleteBooking,
-    createSchedule,
-    getSchedule,
     editService,
     deleteService,
 } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import DashboardEmployees from "../components/dashboard/DashboardEmployees";
+import DashboardSchedules from "../components/dashboard/DashboardSchedules";
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -31,7 +30,6 @@ function Dashboard() {
     const [servicePrice, setServicePrice] = useState("");
     const [serviceDuration, setServiceDuration] = useState("");
     const [employees, setEmployees] = useState([]);
-    const [employeeName, setEmployeeName] = useState("");
     const [bookings, setBookings] = useState([]);
     const [bookingServiceId, setBookingServiceId] = useState("");
     const [bookingEmployeeId, setBookingEmployeeId] = useState("");
@@ -39,10 +37,6 @@ function Dashboard() {
     const [customerName, setCustomerName] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
     const [editingBookingId, setEditingBookingId] = useState(null);
-    const [schedule, setSchedule] = useState([]);
-    const [scheduleDay, setScheduleDay] = useState("");
-    const [scheduleOpen, setScheduleOpen] = useState("");
-    const [scheduleClose, setScheduleClose] = useState("");
     const [editingServiceId, setEditingServiceId] = useState(null);
 
 
@@ -131,20 +125,6 @@ function Dashboard() {
                 setServiceDuration("");
                 setEditingServiceId(null);
             }
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
-
-    const handleCreateEmployee = async (e) => {
-        e.preventDefault();
-
-        try {
-            await createEmployee(employeeName);
-            const data = await getEmployees();
-            setEmployees(data);
-            setEmployeeName("");
         } catch (err) {
             setError(err.message);
         }
@@ -240,17 +220,6 @@ function Dashboard() {
 
 
     useEffect(() => {
-        if (active !== "empleados") return;
-    
-        const fetchEmployees = async () => {
-            const data = await getEmployees();
-            setEmployees(data);
-        };
-        fetchEmployees();
-    }, [active]);
-
-
-    useEffect(() => {
         const fetchUser = async () => {
             const data = await getMe();
             setUser(data);
@@ -266,44 +235,6 @@ function Dashboard() {
             setServices(data);
         };
         fetchServices();
-    }, [active]);
-
-
-    const handleCreateSchedule = async (e) => {
-        e.preventDefault();
-
-        if (!scheduleDay || !scheduleOpen || !scheduleClose) {
-            setError("Completa día, apertura y cierre");
-            return;
-        }
-
-        try {
-            await createSchedule({
-                dayOfWeek: scheduleDay,
-                openTime: scheduleOpen,
-                closeTime: scheduleClose,
-            });
-
-            const data = await getSchedule();
-            setSchedule(data);
-            setScheduleDay("");
-            setScheduleOpen("");
-            setScheduleClose("");
-            setError("");
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
-
-    useEffect(() => {
-        if (active !== "horarios") return;
-    
-        const fetchSchedule = async () => {
-            const data = await getSchedule();
-            setSchedule(data);
-        };
-        fetchSchedule();
     }, [active]);
 
 
@@ -369,34 +300,6 @@ function Dashboard() {
     const sortedBookings = [...bookings].sort((a, b) =>
         (a.startAt || "").localeCompare(b.startAt || "")
     );
-
-    const dayLabels = {
-        MONDAY: "Lunes",
-        TUESDAY: "Martes",
-        WEDNESDAY: "Miércoles",
-        THURSDAY: "Jueves",
-        FRIDAY: "Viernes",
-        SATURDAY: "Sábado",
-        SUNDAY: "Domingo",
-    };
-
-    const dayOrder = [
-        "MONDAY",
-        "TUESDAY",
-        "WEDNESDAY",
-        "THURSDAY",
-        "FRIDAY",
-        "SATURDAY",
-        "SUNDAY",
-    ];
-
-    const scheduleByDay = schedule.reduce((acc, item) => {
-        if (!acc[item.dayOfWeek]) {
-            acc[item.dayOfWeek] = [];
-        }
-        acc[item.dayOfWeek].push(item);
-        return acc;
-    }, {});
 
     return (
         <div className="dashboard">
@@ -578,39 +481,7 @@ function Dashboard() {
 
 
 
-                    {active === "empleados" && (
-                        <div className="dash-section">
-                            <h2 className="dash-section-title">Empleados</h2>
-
-                            <form className="dash-form dash-form-inline" onSubmit={handleCreateEmployee}>
-                                <input
-                                    type="text"
-                                    placeholder="Nombre del empleado"
-                                    value={employeeName}
-                                    onChange={(e) => setEmployeeName(e.target.value)}
-                                />
-                                <button type="submit">Añadir empleado</button>
-                            </form>
-
-                            {employees.length === 0 && (
-                                <p className="dash-empty">No hay empleados todavía</p>
-                            )}
-
-                            <div className="dash-employee-grid">
-                                {employees.map((employee) => (
-                                    <div key={employee.id} className="dash-employee-card">
-                                        <div className="dash-employee-avatar">
-                                            {employee.name.charAt(0).toUpperCase()}
-                                        </div>
-                                        <h3>{employee.name}</h3>
-                                        <span className={`dash-employee-status ${employee.active ? "active" : ""}`}>
-                                            {employee.active ? "Activo" : "Inactivo"}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    {active === "empleados" && <DashboardEmployees />}
 
 
                     {active === "reservas" && (
@@ -715,63 +586,7 @@ function Dashboard() {
                         </div>
                     )}
 
-                    {active === "horarios" && (
-                        <div className="dash-section">
-                            <h2 className="dash-section-title">Horarios</h2>
-
-                            <form className="dash-form" onSubmit={handleCreateSchedule}>
-                                <select
-                                    value={scheduleDay}
-                                    onChange={(e) => setScheduleDay(e.target.value)}
-                                >
-                                    <option value="">Selecciona día</option>
-                                    <option value="MONDAY">Lunes</option>
-                                    <option value="TUESDAY">Martes</option>
-                                    <option value="WEDNESDAY">Miércoles</option>
-                                    <option value="THURSDAY">Jueves</option>
-                                    <option value="FRIDAY">Viernes</option>
-                                    <option value="SATURDAY">Sábado</option>
-                                    <option value="SUNDAY">Domingo</option>
-                                </select>
-                                <input
-                                    type="time"
-                                    value={scheduleOpen}
-                                    onChange={(e) => setScheduleOpen(e.target.value)}
-                                />
-                                <input
-                                    type="time"
-                                    value={scheduleClose}
-                                    onChange={(e) => setScheduleClose(e.target.value)}
-                                />
-                                <button type="submit">Añadir horario</button>
-                            </form>
-
-                            {error && <p className="dash-error">{error}</p>}
-
-                            {schedule.length === 0 && (
-                                <p className="dash-empty">No hay horarios todavía</p>
-                            )}
-
-                            <div className="dash-service-grid">
-                                {dayOrder
-                                    .filter((day) => scheduleByDay[day]?.length)
-                                    .map((day) => (
-                                        <div key={day} className="dash-service-card">
-                                            <h3>{dayLabels[day]}</h3>
-                                            {scheduleByDay[day]
-                                                .sort((a, b) =>
-                                                    (a.openTime || "").localeCompare(b.openTime || "")
-                                                )
-                                                .map((item) => (
-                                                    <p key={item.id} className="dash-service-duration">
-                                                        {item.openTime?.slice(0, 5)} - {item.closeTime?.slice(0, 5)}
-                                                    </p>
-                                                ))}
-                                        </div>
-                                    ))}
-                            </div>
-                        </div>
-                    )}
+                    {active === "horarios" && <DashboardSchedules />}
                 </section>
             </main>
         </div>
