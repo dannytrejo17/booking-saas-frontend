@@ -8,12 +8,54 @@
     font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
+.header--landing {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: transparent;
+    border-bottom: none;
+    padding: 1.25rem 2.5rem;
+}
+
+.header--landing .header-logo {
+    color: #ffffff;
+}
+
+.header--landing .header-nav-link {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.header--landing .header-nav-link:hover {
+    color: #ffffff;
+}
+
+.header--landing .header-link {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.header--landing .header-link:hover {
+    color: #ffffff;
+}
+
+.header--landing .header-btn-outline {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+}
+
+.header--landing .header-btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 .header-logo {
     display: flex;
     align-items: center;
     gap: 0.65rem;
     text-decoration: none;
     color: #111827;
+    flex-shrink: 0;
 }
 
 .header-logo-icon {
@@ -23,7 +65,7 @@
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: #4338ca;
+    background: #6366f1;
     color: #ffffff;
     font-weight: 800;
     font-size: 1rem;
@@ -35,10 +77,32 @@
     letter-spacing: -0.02em;
 }
 
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+}
+
+.header-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.header-nav-link:hover {
+    color: #111827;
+}
+
 .header-actions {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex-shrink: 0;
 }
 
 .header-link {
@@ -62,17 +126,18 @@
     padding: 0.6rem 1.1rem;
     border: none;
     border-radius: 8px;
-    background: #4338ca;
+    background: #6366f1;
     color: #ffffff;
     font-size: 0.9rem;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
     text-decoration: none;
+    transition: background 0.2s;
 }
 
 .header-btn:hover {
-    background: #3730a3;
+    background: #4f46e5;
 }
 
 .header-btn-outline {
@@ -83,6 +148,16 @@
 
 .header-btn-outline:hover {
     background: #f9fafb;
+}
+
+@media (max-width: 1024px) {
+    .header-nav {
+        display: none;
+    }
+
+    .header--landing {
+        padding: 1rem 1.25rem;
+    }
 }
 
 @media (max-width: 640px) {
