@@ -84,7 +84,8 @@
 .public-hero {
     position: relative;
     overflow: hidden;
-    padding: 5rem 2rem 4.5rem;
+    min-height: 280px;
+    padding: 5rem 2rem 7.5rem;
     color: #fff;
     background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 45%, #4338ca 100%);
 }
@@ -92,16 +93,59 @@
 .public-hero-bg {
     position: absolute;
     inset: 0;
-    background:
+    background-color: transparent;
+    background-image:
         radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.35) 0%, transparent 50%),
         radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.25) 0%, transparent 45%);
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+}
+
+.public-hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(15, 23, 42, 0.45) 0%,
+        rgba(15, 23, 42, 0.75) 100%
+    );
     pointer-events: none;
 }
 
 .public-hero-inner {
     position: relative;
+    z-index: 1;
     max-width: 960px;
     margin: 0 auto;
+}
+
+.public-logo-row {
+    position: relative;
+    z-index: 2;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.public-logo-wrap {
+    width: 176px;
+    height: 176px;
+    margin-top: -88px;
+    border-radius: 50%;
+    border: 6px solid #ffffff;
+    background: #111111;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.public-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .public-badge {
@@ -169,6 +213,7 @@
 
 .public-hero-cta {
     padding: 0.95rem 1.75rem;
+    margin-bottom: 0.5rem;
     border: none;
     border-radius: 12px;
     background: #fff;
@@ -191,6 +236,10 @@
     max-width: 960px;
     margin: 0 auto;
     padding: 3.5rem 2rem 5rem;
+}
+
+.public-main--with-logo {
+    padding-top: 1.5rem;
 }
 
 .public-section {
@@ -610,11 +659,27 @@
 
 @media (max-width: 600px) {
     .public-hero {
-        padding: 3.5rem 1.25rem 3rem;
+        padding: 3.5rem 1.25rem 5.5rem;
+        min-height: 220px;
+    }
+
+    .public-logo-row {
+        padding: 0 1.25rem;
+    }
+
+    .public-logo-wrap {
+        width: 128px;
+        height: 128px;
+        margin-top: -64px;
+        border-width: 5px;
     }
 
     .public-main {
         padding: 2.5rem 1.25rem 4rem;
+    }
+
+    .public-main--with-logo {
+        padding-top: 1.25rem;
     }
 
     .public-booking-section {

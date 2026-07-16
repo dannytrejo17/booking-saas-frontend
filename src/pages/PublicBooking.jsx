@@ -152,7 +152,15 @@ function PublicBooking() {
     return (
         <div className="public-page">
             <header className="public-hero">
-                <div className="public-hero-bg" aria-hidden="true" />
+                <div
+                    className="public-hero-bg"
+                    style={
+                        business.coverImage
+                            ? { backgroundImage: `url(${business.coverImage})` }
+                            : undefined
+                    }
+                    aria-hidden="true"
+                />
                 <div className="public-hero-inner">
                     <span className="public-badge">Reservas online</span>
                     <h1>{business.name}</h1>
@@ -198,7 +206,19 @@ function PublicBooking() {
                 </div>
             </header>
 
-            <main className="public-main">
+            {business.logo && (
+                <div className="public-logo-row">
+                    <div className="public-logo-wrap">
+                        <img
+                            src={business.logo}
+                            alt={business.name}
+                            className="public-logo"
+                        />
+                    </div>
+                </div>
+            )}
+
+            <main className={`public-main${business.logo ? " public-main--with-logo" : ""}`}>
                 {services.length > 0 && (
                     <section className="public-section">
                         <div className="public-section-header">
