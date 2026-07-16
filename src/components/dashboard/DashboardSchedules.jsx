@@ -5,6 +5,7 @@ import {
     getEmployees,
     createEmployeeSchedule,
     getEmployeeSchedule,
+    deleteSchedule,
 } from "../../services/authService";
 
 const dayLabels = {
@@ -27,14 +28,19 @@ const dayOrder = [
     "SUNDAY",
 ];
 
+
 function groupScheduleByDay(items) {
-    return items.reduce((acc, item) => {
-        if (!acc[item.dayOfWeek]) {
-            acc[item.dayOfWeek] = [];
+    const result = {};
+
+    for (const item of items) {
+        const day = item.dayOfWeek;
+
+        if (!result[day]) {
+            result[day] = [];
         }
-        acc[item.dayOfWeek].push(item);
-        return acc;
-    }, {});
+        result[day].push(item);
+    }
+    return result;
 }
 
 function DashboardSchedules() {
@@ -49,6 +55,7 @@ function DashboardSchedules() {
     const [empScheduleOpen, setEmpScheduleOpen] = useState("");
     const [empScheduleClose, setEmpScheduleClose] = useState("");
     const [error, setError] = useState("");
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,6 +72,7 @@ function DashboardSchedules() {
         };
         fetchData();
     }, []);
+
 
     useEffect(() => {
         if (!selectedEmployeeId) {
@@ -106,6 +114,17 @@ function DashboardSchedules() {
             setScheduleDay("");
             setScheduleOpen("");
             setScheduleClose("");
+            setError("");
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const handleDeleteSchedule = async (day) => {
+        try {
+            await deleteSchedule(day);
+            const data = await getSchedule();
+            setSchedule(data);
             setError("");
         } catch (err) {
             setError(err.message);
@@ -193,6 +212,13 @@ function DashboardSchedules() {
                                         {item.openTime?.slice(0, 5)} - {item.closeTime?.slice(0, 5)}
                                     </p>
                                 ))}
+                                 <button
+                                type="button"
+                                className="dash-btn-delete"
+                                onClick={() => handleDeleteSchedule(day)}
+                            >
+                                Eliminar
+                            </button>
                         </div>
                     ))}
             </div>
