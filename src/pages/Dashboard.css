@@ -267,6 +267,126 @@
     gap: 1rem;
 }
 
+.dash-images {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.dash-images .dash-section-title {
+    margin-bottom: 0.35rem;
+}
+
+.dash-images-hint {
+    margin: 0 0 1.5rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.dash-images-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 1.25rem;
+}
+
+.dash-image-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 1.1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+}
+
+.dash-image-card-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dash-image-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #e2e8f0;
+    border: 1px dashed #cbd5e1;
+}
+
+.dash-image-preview--logo {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #fff;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+    align-self: center;
+}
+
+.dash-image-preview--cover {
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    border-radius: 12px;
+}
+
+.dash-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.dash-image-placeholder {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.dash-image-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    padding: 0.65rem 1.15rem;
+    border-radius: 10px;
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.dash-image-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-1px);
+}
+
+.dash-image-btn input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.dash-images .dash-error {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+}
+
 .dash-stat-card {
     display: flex;
     flex-direction: column;
@@ -305,6 +425,10 @@
 @media (max-width: 768px) {
     .dash-stats {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dash-images-grid {
+        grid-template-columns: 1fr;
     }
 }
 
