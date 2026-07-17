@@ -44,6 +44,22 @@ export async function register(name, email, password) {
 }
 
 
+export async function verifyCode(email, code) {
+
+    const response = await fetch(`${API_URL}/api/auth/verifyCode`, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, code })
+    });
+    if (!response.ok) {
+        throw new Error(`Verificación falló (${response.status}): ${await response.text()}`);
+    }
+
+}
+ 
+
 
 function authHeaders() {                    
     return {
