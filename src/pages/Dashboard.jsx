@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import DashboardOnboarding from "../components/dashboard/DashboardOnboarding";
 import {
     getMe,
-    createBusiness,
     logout,
     getServices,
     createService,
@@ -21,9 +21,6 @@ import "./Dashboard.css";
 
 function Dashboard() {
     const [user, setUser] = useState(null);
-    const [name, setName] = useState("");
-    const [slug, setSlug] = useState("");
-    const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [active, setActive] = useState("resumen");
     const [services, setServices] = useState([]);
@@ -59,18 +56,6 @@ function Dashboard() {
         customerName,
         customerPhone,
     });
-
-    const handleCreateBusiness = async (e) => {
-        e.preventDefault();
-
-        try {
-            await createBusiness({ name, slug, email, phone: "", address: "", logo: "" });
-            const data = await getMe();
-            setUser(data);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
 
 
     const handleSubmitService = async (e) => {
@@ -202,6 +187,11 @@ function Dashboard() {
         }
     }
 
+    const refreshUser = async () => {
+        const data = await getMe();
+        setUser(data);
+    };
+
     useEffect(() => {
         if (active !== "resumen") return;
 
@@ -257,39 +247,7 @@ function Dashboard() {
     }
 
     if (!user.business) {
-        return (
-            <div className="onboarding-page">
-                <div className="onboarding-card">
-                    <span className="onboarding-badge">Primer paso</span>
-                    <h1>Crea tu negocio</h1>
-                    <p className="onboarding-subtitle">
-                        Configura tu negocio para empezar a gestionar servicios y empleados.
-                    </p>
-                    <form className="onboarding-form" onSubmit={handleCreateBusiness}>
-                        <input
-                            type="text"
-                            placeholder="Nombre del negocio"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            placeholder="mi-barberia"
-                            value={slug}
-                            onChange={(e) => setSlug(e.target.value)}
-                        />
-                        <input
-                            type="email"
-                            placeholder="Email del negocio"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <button type="submit">Crear mi negocio</button>
-                    </form>
-                    {error && <p className="onboarding-error">{error}</p>}
-                </div>
-            </div>
-        );
+        return <DashboardOnboarding onBusinessCreated={refreshUser} />;
     }
 
     const handleLogout = () => {
