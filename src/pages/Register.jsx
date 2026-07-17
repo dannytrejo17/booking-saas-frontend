@@ -16,7 +16,7 @@ function Register() {
 
         try {
             await register(name, email, password);
-            navigate("/login");
+            navigate("/verify", { state: { email } });
         } catch (error) {
             console.error(error);
             setError(error.message);
