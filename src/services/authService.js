@@ -1,3 +1,5 @@
+import { getErrorMessage } from "./apiError";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function login(email, password) {
@@ -10,11 +12,7 @@ export async function login(email, password) {
     });
 
     if (!response.ok) {
-        if (response.status === 401) {
-            throw new Error("Credenciales incorrectas");
-        }
-        const message = await response.text();
-        throw new Error(message || "No se pudo iniciar sesión");
+        throw new Error(await getErrorMessage(response, "No se pudo iniciar sesión"));
     }
 
     const data = await response.json();
@@ -37,7 +35,7 @@ export async function register(name, email, password) {
         body: JSON.stringify({ name, email, password })
     });
     if (!response.ok) {
-        throw new Error(`Registro falló (${response.status}): ${await response.text()}`);
+        throw new Error(await getErrorMessage(response, "No se pudo completar el registro"));
     }
     const data = await response.json();
     return data;
@@ -45,23 +43,20 @@ export async function register(name, email, password) {
 
 
 export async function verifyCode(email, code) {
-
     const response = await fetch(`${API_URL}/api/auth/verifyCode`, {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email, code })
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, code })
     });
     if (!response.ok) {
-        throw new Error(`Verificación falló (${response.status}): ${await response.text()}`);
+        throw new Error(await getErrorMessage(response, "No se pudo verificar el código"));
     }
-
 }
- 
 
 
-function authHeaders() {                    
+function authHeaders() {
     return {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getToken()}`
@@ -74,7 +69,7 @@ export async function getMe() {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error("No se pudo obtener el usuario");
+        throw new Error(await getErrorMessage(response, "No se pudo obtener el usuario"));
     }
     return response.json();
 }
@@ -85,21 +80,20 @@ export async function getServices() {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error("No se pudieron cargar los servicios");
+        throw new Error(await getErrorMessage(response, "No se pudieron cargar los servicios"));
     }
     return response.json();
 }
 
 
 export async function createBusiness(data) {
-
     const response = await fetch(`${API_URL}/api/business/create`, {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify(data)
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo crear el negocio"));
     }
     return response.json();
 }
@@ -112,39 +106,35 @@ export async function createService(data) {
         body: JSON.stringify(data)
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo crear el servicio"));
     }
     return response.text();
 }
 
 
 export async function editService(id, data) {
-
     const response = await fetch(`${API_URL}/api/services/${id}`, {
         method: "PUT",
         headers: authHeaders(),
         body: JSON.stringify(data)
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo editar el servicio"));
     }
     return response.text();
 }
 
 
-export async function deleteService(id){
-
+export async function deleteService(id) {
     const response = await fetch(`${API_URL}/api/services/${id}`, {
         method: "DELETE",
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo eliminar el servicio"));
     }
     return response.text();
 }
-
-
 
 
 export async function getEmployees() {
@@ -152,7 +142,7 @@ export async function getEmployees() {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error("No se pudieron cargar los empleados");
+        throw new Error(await getErrorMessage(response, "No se pudieron cargar los empleados"));
     }
     return response.json();
 }
@@ -164,7 +154,7 @@ export async function createEmployee(name) {
         body: JSON.stringify({ name, active: true })
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo crear el empleado"));
     }
     return response.text();
 }
@@ -176,7 +166,7 @@ export async function editEmployee(id, data) {
         body: JSON.stringify(data)
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo editar el empleado"));
     }
     return response.text();
 }
@@ -187,7 +177,7 @@ export async function deleteEmployee(id) {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo eliminar el empleado"));
     }
     return response.text();
 }
@@ -197,7 +187,7 @@ export async function getEmployeeSchedule(employeeId) {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error("No se pudieron cargar los horarios del empleado");
+        throw new Error(await getErrorMessage(response, "No se pudieron cargar los horarios del empleado"));
     }
     return response.json();
 }
@@ -209,11 +199,10 @@ export async function createEmployeeSchedule(employeeId, data) {
         body: JSON.stringify(data)
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo crear el horario del empleado"));
     }
     return response.text();
 }
-
 
 
 export async function getBookings() {
@@ -221,7 +210,7 @@ export async function getBookings() {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error("No se pudieron cargar las reservas");
+        throw new Error(await getErrorMessage(response, "No se pudieron cargar las reservas"));
     }
     return response.json();
 }
@@ -234,7 +223,7 @@ export async function createBooking(data) {
         body: JSON.stringify(data)
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo crear la reserva"));
     }
     return response.text();
 }
@@ -247,7 +236,7 @@ export async function editBooking(id, data) {
         body: JSON.stringify(data)
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo editar la reserva"));
     }
     return response.text();
 }
@@ -259,29 +248,29 @@ export async function deleteBooking(id) {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo eliminar la reserva"));
     }
     return response.text();
 }
 
-export async function createSchedule(data){
+export async function createSchedule(data) {
     const response = await fetch(`${API_URL}/api/schedule`, {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify(data)
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo crear el horario"));
     }
     return response.text();
 }
 
-export async function getSchedule(){
+export async function getSchedule() {
     const response = await fetch(`${API_URL}/api/schedule`, {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error("No se pudieron cargar las horarios");
+        throw new Error(await getErrorMessage(response, "No se pudieron cargar los horarios"));
     }
     return response.json();
 }
@@ -293,12 +282,12 @@ export async function deleteSchedule(dayOfWeek) {
         headers: authHeaders()
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo eliminar el horario"));
     }
     return response.text();
 }
 
-export async function uploadBusinessImage(file, type){
+export async function uploadBusinessImage(file, type) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("type", type);
@@ -306,20 +295,19 @@ export async function uploadBusinessImage(file, type){
         method: "POST",
         headers: {
             Authorization: `Bearer ${getToken()}`
-          } 
-        ,body: formData
+        },
+        body: formData
     });
     if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(await getErrorMessage(response, "No se pudo subir la imagen"));
     }
     return response.json();
 }
 
 
-export function getToken(){
+export function getToken() {
     return localStorage.getItem("token");
 }
-
 
 
 export function logout() {
