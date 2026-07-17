@@ -12,6 +12,7 @@ import {
     deleteBooking,
     editService,
     deleteService,
+    uploadBusinessImage,
 } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import DashboardEmployees from "../components/dashboard/DashboardEmployees";
@@ -187,6 +188,19 @@ function Dashboard() {
             setError(err.message);
         }
     };
+
+    const handleUploadBusinessImage = async (e, type) => {
+        const file = e.target.files?.[0];
+        try {
+            await uploadBusinessImage(file, type);
+            const data = await getMe();
+            setUser(data);
+            setError("");
+            e.target.value = "";   // limpia el input para poder subir otra vez el mismo archivo
+        } catch (err) {
+            setError(err.message);
+        }
+    }
 
     useEffect(() => {
         if (active !== "resumen") return;
@@ -422,7 +436,58 @@ function Dashboard() {
                                     <span className="dash-stat-value">{todayBookingsCount}</span>
                                     <span className="dash-stat-label">Hoy</span>
                                 </div>
+                               
                             </div>
+                            
+                            <div className="dash-images">
+                                <h2 className="dash-section-title">Imágenes del negocio</h2>
+                                <p className="dash-images-hint">
+                                    JPG, PNG o WEBP. El logo se ve circular en tu página pública; la portada como fondo del hero.
+                                </p>
+
+                                <div className="dash-images-grid">
+                                    <div className="dash-image-card">
+                                        <span className="dash-image-card-label">Logo</span>
+                                        <div className="dash-image-preview dash-image-preview--logo">
+                                            {user.business.logo ? (
+                                                <img src={user.business.logo} alt="Logo del negocio" />
+                                            ) : (
+                                                <span className="dash-image-placeholder">Sin logo</span>
+                                            )}
+                                        </div>
+                                        <label className="dash-image-btn">
+                                            {user.business.logo ? "Cambiar logo" : "Subir logo"}
+                                            <input
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp"
+                                                onChange={(e) => handleUploadBusinessImage(e, "logo")}
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div className="dash-image-card">
+                                        <span className="dash-image-card-label">Portada</span>
+                                        <div className="dash-image-preview dash-image-preview--cover">
+                                            {user.business.coverImage ? (
+                                                <img src={user.business.coverImage} alt="Portada del negocio" />
+                                            ) : (
+                                                <span className="dash-image-placeholder">Sin portada</span>
+                                            )}
+                                        </div>
+                                        <label className="dash-image-btn">
+                                            {user.business.coverImage ? "Cambiar portada" : "Subir portada"}
+                                            <input
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp"
+                                                onChange={(e) => handleUploadBusinessImage(e, "cover")}
+                                            />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {error && <p className="dash-error">{error}</p>}
+                            </div>
+
                         </div>
                     )}
 
