@@ -282,8 +282,22 @@ export async function deleteSchedule(dayOfWeek) {
     return response.text();
 }
 
-
-
+export async function uploadBusinessImage(file, type){
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", type);
+    const response = await fetch(`${API_URL}/api/business/upload`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+          } 
+        ,body: formData
+    });
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+    return response.json();
+}
 
 
 export function getToken(){
