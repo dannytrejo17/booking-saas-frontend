@@ -54,7 +54,7 @@ function Dashboard() {
                 <header className="dashboard-topbar">
                     <div>
                         <h1>Hola, {user.name}</h1>
-                        <p>Gestiona {user.business.name} desde aquí</p>
+                        <p>Gestiona tu negocio de forma fácil y eficiente</p>
                     </div>
                 </header>
 

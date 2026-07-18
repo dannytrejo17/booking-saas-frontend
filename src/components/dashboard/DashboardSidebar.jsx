@@ -21,7 +21,7 @@ function DashboardSidebar({ user, active, onChangeSection, onLogout }) {
                     className={`sidebar-btn ${active === "servicios" ? "active" : ""}`}
                     onClick={() => onChangeSection("servicios")}
                 >
-                    <span className="sidebar-btn-icon">✂</span>
+                    <span className="sidebar-btn-icon">📋</span>
                     Servicios
                 </button>
                 <button
