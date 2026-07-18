@@ -222,7 +222,6 @@ function PublicBooking() {
                 {services.length > 0 && (
                     <section className="public-section">
                         <div className="public-section-header">
-                            <span className="public-section-label">Paso 1</span>
                             <h2>Servicios</h2>
                             <p>Selecciona el servicio que deseas reservar</p>
                         </div>
@@ -252,7 +251,6 @@ function PublicBooking() {
                 {employees.length > 0 && (
                     <section className="public-section">
                         <div className="public-section-header">
-                            <span className="public-section-label">Paso 2</span>
                             <h2>Profesionales</h2>
                             <p>Elige con quién quieres tu cita</p>
                         </div>
@@ -275,7 +273,6 @@ function PublicBooking() {
                 <section className="public-section public-booking-section" id="reservar">
                     <div className="public-booking-layout">
                         <div className="public-booking-intro">
-                            <span className="public-section-label">Paso 3</span>
                             <h2>Completa tu reserva</h2>
                             <p>Indica fecha, hora y tus datos de contacto</p>
 
