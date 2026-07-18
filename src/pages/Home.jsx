@@ -4,45 +4,42 @@ import Header from "../components/Header/Header";
 import "./Home.css";
 
 const HERO_FEATURES = [
-    { icon: "calendar", label: "Reservas 24/7" },
-    { icon: "bell", label: "Recordatorios automáticos" },
-    { icon: "chart", label: "Reportes y estadísticas" },
-    { icon: "card", label: "Pagos en línea" },
-];
-
-const TRUST_LOGOS = [
-    "Barbería Classic",
-    "Lux Beauty",
-    "Spa Natural",
-    "Urban Cuts",
-    "Bella & Co.",
+    { icon: "calendar", label: "Reservas online" },
+    { icon: "users", label: "Equipo y horarios" },
+    { icon: "chart", label: "Panel de control" },
+    { icon: "link", label: "Página pública" },
 ];
 
 const FEATURES = [
     {
         icon: "calendar",
-        title: "Reservas online 24/7",
-        description: "Tus clientes reservan a cualquier hora desde tu web o enlace personalizado.",
+        title: "Reservas online",
+        description:
+            "Tus clientes eligen servicio, profesional y horario desde tu enlace público, a cualquier hora.",
     },
     {
         icon: "users",
         title: "Gestión de empleados",
-        description: "Asigna citas, define horarios y controla la agenda de todo tu equipo.",
+        description:
+            "Añade tu equipo, define quién atiende cada cita y organiza la agenda del negocio.",
     },
     {
-        icon: "bell",
-        title: "Recordatorios automáticos",
-        description: "Reduce ausencias con avisos automáticos por email o SMS antes de cada cita.",
+        icon: "clock",
+        title: "Horarios a tu medida",
+        description:
+            "Configura la apertura del negocio y los turnos de cada empleado para evitar solapes.",
+    },
+    {
+        icon: "link",
+        title: "Página pública con tu marca",
+        description:
+            "Comparte un enlace con logo y portada. Tus clientes reservan sin llamar ni escribir.",
     },
     {
         icon: "chart",
-        title: "Reportes y estadísticas",
-        description: "Visualiza reservas, ingresos y servicios más demandados en tiempo real.",
-    },
-    {
-        icon: "card",
-        title: "Pagos en línea",
-        description: "Cobra anticipos o pagos completos al reservar. Integración con Stripe.",
+        title: "Resumen en el panel",
+        description:
+            "Consulta servicios, empleados y reservas del día o del mes desde un solo lugar.",
     },
 ];
 
@@ -50,7 +47,7 @@ const SECTORS = [
     { id: "barberias", label: "Barberías", icon: "✂️" },
     { id: "estetica", label: "Estética", icon: "💄" },
     { id: "spa", label: "Spa", icon: "🧖" },
-    { id: "clinicas", label: "Clínicas", icon: "🏥" },
+    { id: "peluquerias", label: "Peluquerías", icon: "💇" },
     { id: "mas", label: "Y más...", icon: "➕" },
 ];
 
@@ -68,16 +65,32 @@ const BUSINESS_IMAGES = [
         src: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=420&fit=crop&q=80",
     },
     {
-        label: "Clínicas",
-        src: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&h=420&fit=crop&q=80",
+        label: "Peluquerías",
+        src: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=420&fit=crop&q=80",
     },
 ];
 
-const STATS = [
-    { icon: "smile", value: "+5,000", label: "Negocios confían en ReservaApp" },
-    { icon: "calendar", value: "+1,2M", label: "Reservas realizadas" },
-    { icon: "star", value: "4.9/5", label: "Valoración de nuestros clientes" },
-    { icon: "trend", value: "+35%", label: "Más reservas para nuestros clientes" },
+const HIGHLIGHTS = [
+    {
+        icon: "link",
+        value: "Enlace propio",
+        label: "Página de reservas lista para compartir",
+    },
+    {
+        icon: "clock",
+        value: "En minutos",
+        label: "Configura servicios, equipo y horarios",
+    },
+    {
+        icon: "users",
+        value: "Un solo panel",
+        label: "Agenda y negocio en el mismo sitio",
+    },
+    {
+        icon: "calendar",
+        value: "Sin tarjeta",
+        label: "Empieza gratis y prueba el flujo real",
+    },
 ];
 
 function FeatureIcon({ type }) {
@@ -112,23 +125,16 @@ function FeatureIcon({ type }) {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
         ),
-        smile: (
+        clock: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                 <circle cx="12" cy="12" r="10" />
-                <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                <line x1="9" y1="9" x2="9.01" y2="9" />
-                <line x1="15" y1="9" x2="15.01" y2="9" />
+                <path d="M12 6v6l4 2" />
             </svg>
         ),
-        star: (
+        link: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-        ),
-        trend: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                <polyline points="17 6 23 6 23 12" />
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
             </svg>
         ),
     };
@@ -152,8 +158,8 @@ function Home() {
                             <span>para hacer crecer tu negocio</span>
                         </h1>
                         <p className="home-hero-subtitle">
-                            Gestiona tus citas, clientes y empleados en un solo lugar.
-                            Más reservas, menos esfuerzo.
+                            Gestiona citas, servicios y empleados en un solo panel.
+                            Tus clientes reservan online desde tu propio enlace.
                         </p>
 
                         <div className="home-hero-features">
@@ -172,7 +178,7 @@ function Home() {
                             </Link>
                             <a href="#features" className="home-btn-demo">
                                 <span className="home-play-icon" aria-hidden="true">▶</span>
-                                Ver demo
+                                Ver cómo funciona
                             </a>
                         </div>
 
@@ -181,7 +187,7 @@ function Home() {
                                 <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
                                 <path d="M5 8l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            No necesitas tarjeta de crédito
+                            Sin tarjeta. Crea tu cuenta y configura tu negocio hoy.
                         </p>
                     </div>
 
@@ -205,11 +211,11 @@ function Home() {
                                             <strong>12</strong>
                                         </div>
                                         <div className="home-mockup-stat">
-                                            <span>Ingresos hoy</span>
-                                            <strong>€480</strong>
+                                            <span>Servicios</span>
+                                            <strong>8</strong>
                                         </div>
                                         <div className="home-mockup-stat">
-                                            <span>Nuevos clientes</span>
+                                            <span>Equipo</span>
                                             <strong>3</strong>
                                         </div>
                                     </div>
@@ -230,15 +236,15 @@ function Home() {
                             <div className="home-mockup-phone-content">
                                 <p className="home-mockup-phone-title">Reservar cita</p>
                                 <div className="home-mockup-service">
-                                    <span>Corte de cabello</span>
+                                    <span>Corte</span>
                                     <strong>€15</strong>
                                 </div>
                                 <div className="home-mockup-service">
-                                    <span>Barba</span>
-                                    <strong>€10</strong>
+                                    <span>Manicura</span>
+                                    <strong>€20</strong>
                                 </div>
                                 <div className="home-mockup-service">
-                                    <span>Coloración</span>
+                                    <span>Masaje</span>
                                     <strong>€35</strong>
                                 </div>
                                 <div className="home-mockup-phone-btn">Reservar</div>
@@ -250,11 +256,15 @@ function Home() {
 
             <section className="home-trust">
                 <div className="home-container">
-                    <p className="home-trust-title">Confían en nosotros negocios como el tuyo</p>
+                    <p className="home-trust-title">
+                        Ideal para negocios locales que viven de las citas
+                    </p>
                     <div className="home-trust-logos">
-                        {TRUST_LOGOS.map((name) => (
-                            <span key={name} className="home-trust-logo">{name}</span>
-                        ))}
+                        <span className="home-trust-logo">Barberías</span>
+                        <span className="home-trust-logo">Estética</span>
+                        <span className="home-trust-logo">Spas</span>
+                        <span className="home-trust-logo">Peluquerías</span>
+                        <span className="home-trust-logo">Masajes</span>
                     </div>
                 </div>
             </section>
@@ -263,12 +273,12 @@ function Home() {
                 <div className="home-container">
                     <div className="home-section-header">
                         <h2>
-                            Todo lo que necesitas{" "}
-                            <span>para gestionar tu negocio</span>
+                            Todo lo esencial{" "}
+                            <span>para gestionar tus reservas</span>
                         </h2>
                         <p>
-                            Una plataforma completa para automatizar reservas, reducir ausencias
-                            y hacer crecer tu negocio sin complicaciones.
+                            ReservaApp te ayuda a publicar tu página de citas y a organizar
+                            el día a día del negocio sin herramientas separadas.
                         </p>
                     </div>
 
@@ -288,12 +298,13 @@ function Home() {
                 <div className="home-container home-businesses-inner">
                     <div className="home-businesses-content">
                         <h2>
-                            Diseñado para{" "}
+                            Pensado para{" "}
                             <span>negocios como el tuyo</span>
                         </h2>
                         <p>
-                            ReservaApp se adapta a barberías, centros de estética, spas y clínicas.
-                            Configura servicios, empleados y horarios en minutos.
+                            Si atiendes con cita previa —barbería, estética, spa o peluquería—
+                            puedes configurar servicios, empleados y horarios y empezar a
+                            recibir reservas online.
                         </p>
 
                         <div className="home-sectors">
@@ -312,10 +323,12 @@ function Home() {
 
                         <div className="home-businesses-actions">
                             <Link to="/register" className="home-btn-primary">
-                                Comenzar gratis
+                                Crear mi cuenta
                                 <span aria-hidden="true">→</span>
                             </Link>
-                            <a href="#pricing" className="home-link-secondary">Ver precios</a>
+                            <a href="#features" className="home-link-secondary">
+                                Ver funciones
+                            </a>
                         </div>
                     </div>
 
@@ -330,25 +343,28 @@ function Home() {
                 </div>
             </section>
 
-            <section className="home-stats">
+            <section className="home-stats" id="start">
                 <div className="home-container">
                     <div className="home-stats-grid">
-                        {STATS.map((stat) => (
-                            <div key={stat.label} className="home-stat">
-                                <FeatureIcon type={stat.icon} />
+                        {HIGHLIGHTS.map((item) => (
+                            <div key={item.label} className="home-stat">
+                                <FeatureIcon type={item.icon} />
                                 <div>
-                                    <strong>{stat.value}</strong>
-                                    <span>{stat.label}</span>
+                                    <strong>{item.value}</strong>
+                                    <span>{item.label}</span>
                                 </div>
                             </div>
                         ))}
                     </div>
+                    <div className="home-stats-cta">
+                        <p>Estamos en fase de lanzamiento. Empieza gratis y configura tu negocio real.</p>
+                        <Link to="/register" className="home-btn-primary">
+                            Comenzar ahora
+                            <span aria-hidden="true">→</span>
+                        </Link>
+                    </div>
                 </div>
             </section>
-
-            <div id="pricing" className="home-anchor" aria-hidden="true" />
-            <div id="resources" className="home-anchor" aria-hidden="true" />
-            <div id="contact" className="home-anchor" aria-hidden="true" />
         </div>
     );
 }
