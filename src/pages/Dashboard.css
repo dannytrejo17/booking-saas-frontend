@@ -25,15 +25,11 @@
 }
 
 .sidebar-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     width: 42px;
     height: 42px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #6366f1, #4338ca);
-    font-weight: 800;
-    font-size: 1.1rem;
+    object-fit: cover;
     flex-shrink: 0;
 }
 
@@ -163,9 +159,41 @@
 }
 
 .dashboard-topbar {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
     padding: 1.75rem 2rem;
     background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
+}
+
+.dashboard-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin-top: 0.15rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #ffffff;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.dashboard-menu-btn span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    margin: 0 auto;
+    background: #0f172a;
+    border-radius: 2px;
+}
+
+.sidebar-backdrop {
+    display: none;
 }
 
 .dashboard-topbar h1 {
@@ -859,6 +887,24 @@
     color: #059669;
 }
 
+.dash-employee-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.dash-employee-actions .dash-btn-edit,
+.dash-employee-actions .dash-btn-delete,
+.dash-employee-actions .dash-btn-secondary {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.4rem 0.55rem;
+    font-size: 0.75rem;
+}
+
 /* Formulario reservas */
 .dash-form-booking {
     grid-template-columns: repeat(2, 1fr);
@@ -998,7 +1044,7 @@
     flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .dash-form {
         grid-template-columns: 1fr;
     }
@@ -1148,25 +1194,57 @@
     font-size: 0.875rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .dashboard {
         grid-template-columns: 1fr;
     }
 
-    .sidebar {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.5rem;
+    .sidebar-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 199;
+        border: none;
+        padding: 0;
+        margin: 0;
+        background: rgba(15, 23, 42, 0.5);
+        cursor: pointer;
     }
 
-    .sidebar-nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-        flex: 1 1 100%;
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 200;
+        width: min(280px, 86vw);
+        transform: translateX(-105%);
+        transition: transform 0.25s ease;
+        box-shadow: none;
+    }
+
+    .sidebar--open {
+        transform: translateX(0);
+        box-shadow: 8px 0 32px rgba(0, 0, 0, 0.25);
     }
 
     .sidebar-footer {
-        display: none;
+        display: block;
+    }
+
+    .dashboard-menu-btn {
+        display: flex;
+    }
+
+    .dashboard-topbar {
+        padding: 1.25rem 1.25rem;
+    }
+
+    .dashboard-content {
+        padding: 1.25rem;
+    }
+
+    .dashboard-topbar h1 {
+        font-size: 1.25rem;
     }
 }

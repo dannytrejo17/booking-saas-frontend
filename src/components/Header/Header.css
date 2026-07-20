@@ -2,10 +2,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
     padding: 1rem 2rem;
     background: #ffffff;
     border-bottom: 1px solid #e5e7eb;
     font-family: "Inter", system-ui, -apple-system, sans-serif;
+    box-sizing: border-box;
+}
+
+.header *,
+.header *::before,
+.header *::after {
+    box-sizing: border-box;
 }
 
 .header--landing {
@@ -20,14 +28,6 @@
 }
 
 .header--landing .header-logo {
-    color: #ffffff;
-}
-
-.header--landing .header-nav-link {
-    color: rgba(255, 255, 255, 0.85);
-}
-
-.header--landing .header-nav-link:hover {
     color: #ffffff;
 }
 
@@ -56,46 +56,22 @@
     text-decoration: none;
     color: #111827;
     flex-shrink: 0;
+    z-index: 120;
 }
 
 .header-logo-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: #6366f1;
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 1rem;
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
 .header-logo-text {
     font-size: 1.15rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-}
-
-.header-nav {
-    display: flex;
-    align-items: center;
-    gap: 1.75rem;
-}
-
-.header-nav-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: #374151;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.header-nav-link:hover {
-    color: #111827;
 }
 
 .header-actions {
@@ -123,6 +99,9 @@
 }
 
 .header-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 0.6rem 1.1rem;
     border: none;
     border-radius: 8px;
@@ -150,22 +129,137 @@
     background: #f9fafb;
 }
 
+.header-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    z-index: 120;
+    flex-shrink: 0;
+}
+
+.header:not(.header--landing) .header-menu-btn {
+    border-color: #e5e7eb;
+    background: #ffffff;
+}
+
+.header:not(.header--landing) .header-menu-btn span {
+    background: #0f172a;
+}
+
+.header-menu-btn span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.header--menu-open .header-menu-btn span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.header--menu-open .header-menu-btn span:nth-child(2) {
+    opacity: 0;
+}
+
+.header--menu-open .header-menu-btn span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.header-backdrop {
+    display: none;
+}
+
+.header-mobile-panel {
+    display: none;
+}
+
 @media (max-width: 1024px) {
-    .header-nav {
+    .header-actions--desktop {
         display: none;
+    }
+
+    .header-menu-btn {
+        display: flex;
     }
 
     .header--landing {
         padding: 1rem 1.25rem;
     }
+
+    .header-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 110;
+        border: none;
+        padding: 0;
+        margin: 0;
+        background: rgba(15, 23, 42, 0.55);
+        cursor: pointer;
+    }
+
+    .header-mobile-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 115;
+        width: min(320px, 88vw);
+        height: 100vh;
+        padding: 5rem 1.5rem 2rem;
+        background: #0f172a;
+        color: #ffffff;
+        transform: translateX(105%);
+        transition: transform 0.25s ease;
+        box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-mobile-panel--open {
+        transform: translateX(0);
+    }
+
+    .header-mobile-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .header-mobile-actions .header-btn,
+    .header-mobile-actions .header-btn-outline {
+        width: 100%;
+    }
+
+    .header-mobile-actions .header-btn-outline {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.25);
+        color: #ffffff;
+    }
 }
 
 @media (max-width: 640px) {
     .header {
-        padding: 1rem 1.25rem;
+        padding: 0.85rem 1rem;
     }
 
-    .header-link {
-        display: none;
+    .header-logo-text {
+        font-size: 1rem;
+    }
+
+    .header-logo-icon {
+        width: 32px;
+        height: 32px;
     }
 }

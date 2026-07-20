@@ -13,6 +13,7 @@ import "./Dashboard.css";
 function Dashboard() {
     const [user, setUser] = useState(null);
     const [active, setActive] = useState("resumen");
+    const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     const refreshUser = async () => {
@@ -48,10 +49,23 @@ function Dashboard() {
                 active={active}
                 onChangeSection={setActive}
                 onLogout={handleLogout}
+                open={menuOpen}
+                onClose={() => setMenuOpen(false)}
             />
 
             <main className="dashboard-main">
                 <header className="dashboard-topbar">
+                    <button
+                        type="button"
+                        className="dashboard-menu-btn"
+                        aria-label="Abrir menú"
+                        aria-expanded={menuOpen}
+                        onClick={() => setMenuOpen(true)}
+                    >
+                        <span />
+                        <span />
+                        <span />
+                    </button>
                     <div>
                         <h1>Hola, {user.name}</h1>
                         <p>Gestiona tu negocio de forma fácil y eficiente</p>
