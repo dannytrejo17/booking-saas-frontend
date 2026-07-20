@@ -173,10 +173,6 @@ function Home() {
                                 Comenzar gratis
                                 <span aria-hidden="true">→</span>
                             </Link>
-                            <a href="#features" className="home-btn-demo">
-                                <span className="home-play-icon" aria-hidden="true">▶</span>
-                                Ver cómo funciona
-                            </a>
                         </div>
 
                         <p className="home-hero-trust">
