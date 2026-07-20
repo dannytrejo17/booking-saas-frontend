@@ -7,7 +7,7 @@ function Verify() {
     const [code, setCode] = useState("");
     const [error, setError] = useState("");
     const location = useLocation();
-    const email = location.state?.email || "";
+    const email = location.state?.email || sessionStorage.getItem("verifyEmail") || "";
     const navigate = useNavigate();
 
     const handleVerify = async (e) => {
@@ -15,6 +15,7 @@ function Verify() {
         setError("");
         try {
             await verifyCode(email, code);
+            sessionStorage.removeItem("verifyEmail");
             navigate("/login");
         } catch (error) {
             console.error(error);

@@ -17,17 +17,28 @@ function Dashboard() {
     const navigate = useNavigate();
 
     const refreshUser = async () => {
-        const data = await getMe();
-        setUser(data);
+        try {
+            const data = await getMe();
+            setUser(data);
+        } catch {
+            logout();
+            navigate("/login");
+        }
     };
 
     useEffect(() => {
         const fetchUser = async () => {
-            const data = await getMe();
-            setUser(data);
+            try {
+                const data = await getMe();
+                setUser(data);
+            } catch {
+                logout();
+                navigate("/login");
+            }
         };
+
         fetchUser();
-    }, []);
+    }, [navigate]);
 
     if (!user) {
         return <div className="dash-loading">Cargando...</div>;

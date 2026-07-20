@@ -16,6 +16,7 @@ function Register() {
 
         try {
             await register(name, email, password);
+            sessionStorage.setItem("verifyEmail", email);
             navigate("/verify", { state: { email } });
         } catch (error) {
             console.error(error);

@@ -30,13 +30,19 @@ function PublicBooking() {
     const [date, setDate] = useState("");
     const [slots, setSlots] = useState([]);
     const [slotsLoading, setSlotsLoading] = useState(false);
+    const [slotsError, setSlotsError] = useState(null);
     const [startAt, setStartAt] = useState("");
     const [customerName, setCustomerName] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
     const [success, setSuccess] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
-    const today = new Date().toISOString().split("T")[0];
+    const now = new Date();
+    const today = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0"),
+    ].join("-");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,19 +66,22 @@ function PublicBooking() {
     useEffect(() => {
         if (!serviceId || !employeeId || !date) {
             setSlots([]);
+            setSlotsError(null);
             setStartAt("");
             return;
         }
 
         const fetchSlots = async () => {
             setSlotsLoading(true);
+            setSlotsError(null);
             try {
                 const data = await getAvailability(slug, serviceId, employeeId, date);
                 setSlots(data);
                 setStartAt("");
-            } catch {
+            } catch (err) {
                 setSlots([]);
                 setStartAt("");
+                setSlotsError(err.message || "No se pudieron cargar los horarios");
             } finally {
                 setSlotsLoading(false);
             }
@@ -135,6 +144,7 @@ function PublicBooking() {
             setEmployeeId("");
             setDate("");
             setSlots([]);
+            setSlotsError(null);
             setStartAt("");
             setCustomerName("");
             setCustomerPhone("");
@@ -356,12 +366,17 @@ function PublicBooking() {
                                                 <span>Buscando horarios...</span>
                                             </div>
                                         )}
-                                        {!slotsLoading && slots.length === 0 && (
+                                        {!slotsLoading && slotsError && (
+                                            <p className="public-slots-empty" role="alert">
+                                                {slotsError}
+                                            </p>
+                                        )}
+                                        {!slotsLoading && !slotsError && slots.length === 0 && (
                                             <p className="public-slots-empty">
                                                 No hay horarios disponibles para esta fecha
                                             </p>
                                         )}
-                                        {!slotsLoading && slots.length > 0 && (
+                                        {!slotsLoading && !slotsError && slots.length > 0 && (
                                             <div className="public-slots-grid">
                                                 {slots.map((slot) => (
                                                     <button
