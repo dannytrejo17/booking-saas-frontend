@@ -28,8 +28,16 @@ function Login(){
             <aside className="login-brand">
                 <div className="login-brand-content">
                     <div className="login-logo">
-                        <div className="login-logo-icon">R</div>
-                        <span className="login-logo-text">ReservaApp</span>
+                        <img
+                            src="/brand/turnexa-logo.png"
+                            alt=""
+                            className="login-logo-icon"
+                            width={44}
+                            height={44}
+                        />
+                        <span className="login-logo-text" aria-label="Turnexa">
+                            Turn<span>exa</span>
+                        </span>
                     </div>
                     <h2>Gestiona tu negocio sin complicaciones</h2>
                     <p>

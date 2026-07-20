@@ -28,8 +28,16 @@ function Register() {
             <aside className="register-brand">
                 <div className="register-brand-content">
                     <div className="register-logo">
-                        <div className="register-logo-icon">R</div>
-                        <span className="register-logo-text">ReservaApp</span>
+                        <img
+                            src="/brand/turnexa-logo.png"
+                            alt=""
+                            className="register-logo-icon"
+                            width={44}
+                            height={44}
+                        />
+                        <span className="register-logo-text" aria-label="Turnexa">
+                            Turn<span>exa</span>
+                        </span>
                     </div>
                     <h2>Empieza a gestionar tu negocio hoy</h2>
                     <p>

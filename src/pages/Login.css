@@ -55,22 +55,26 @@
 }
 
 .login-logo-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: #3d44d1;
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 1.25rem;
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
 .login-logo-text {
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+}
+
+.login-logo-text span {
+    background: linear-gradient(90deg, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .login-brand h2 {

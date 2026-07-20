@@ -198,7 +198,13 @@ function Home() {
                             </div>
                             <div className="home-mockup-dashboard">
                                 <div className="home-mockup-sidebar">
-                                    <div className="home-mockup-logo">R</div>
+                                    <img
+                                        src="/brand/turnexa-logo.png"
+                                        alt=""
+                                        className="home-mockup-logo"
+                                        width={28}
+                                        height={28}
+                                    />
                                     <div className="home-mockup-nav-item active" />
                                     <div className="home-mockup-nav-item" />
                                     <div className="home-mockup-nav-item" />
@@ -277,7 +283,7 @@ function Home() {
                             <span>para gestionar tus reservas</span>
                         </h2>
                         <p>
-                            ReservaApp te ayuda a publicar tu página de citas y a organizar
+                            Turnexa te ayuda a publicar tu página de citas y a organizar
                             el día a día del negocio sin herramientas separadas.
                         </p>
                     </div>
