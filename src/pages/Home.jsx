@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header/Header";
 import "./Home.css";
@@ -143,8 +142,6 @@ function FeatureIcon({ type }) {
 }
 
 function Home() {
-    const [activeSector, setActiveSector] = useState("barberias");
-
     return (
         <div className="home-page">
             <Header variant="landing" />
@@ -315,15 +312,10 @@ function Home() {
 
                         <div className="home-sectors">
                             {SECTORS.map((sector) => (
-                                <button
-                                    key={sector.id}
-                                    type="button"
-                                    className={`home-sector${activeSector === sector.id ? " active" : ""}`}
-                                    onClick={() => setActiveSector(sector.id)}
-                                >
+                                <span key={sector.id} className="home-sector">
                                     <span className="home-sector-icon">{sector.icon}</span>
                                     <span>{sector.label}</span>
-                                </button>
+                                </span>
                             ))}
                         </div>
 
