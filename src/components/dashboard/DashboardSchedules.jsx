@@ -6,6 +6,7 @@ import {
     createEmployeeSchedule,
     getEmployeeSchedule,
     deleteSchedule,
+    deleteEmployeeSchedule,
 } from "../../services/authService";
 
 const dayLabels = {
@@ -162,6 +163,17 @@ function DashboardSchedules() {
         }
     };
 
+    const handleDeleteEmployeeSchedule = async (day) => {
+        try {
+            await deleteEmployeeSchedule(selectedEmployeeId, day);
+            const data = await getEmployeeSchedule(selectedEmployeeId);
+            setEmployeeSchedule(data);
+            setError("");
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     return (
         <div className="dash-section">
             <h2 className="dash-section-title">Horarios del negocio</h2>
@@ -289,6 +301,13 @@ function DashboardSchedules() {
                                             {item.openTime?.slice(0, 5)} - {item.closeTime?.slice(0, 5)}
                                         </p>
                                     ))}
+                                <button
+                                    type="button"
+                                    className="dash-btn-delete"
+                                    onClick={() => handleDeleteEmployeeSchedule(day)}
+                                >
+                                    Eliminar
+                                </button>
                             </div>
                         ))}
                 </div>

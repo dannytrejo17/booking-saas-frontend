@@ -204,6 +204,23 @@ export async function createEmployeeSchedule(employeeId, data) {
     return response.text();
 }
 
+export async function deleteEmployeeSchedule(employeeId, dayOfWeek) {
+    const params = new URLSearchParams({ dayOfWeek });
+    const response = await fetch(
+        `${API_URL}/api/employees/${employeeId}/schedule?${params}`,
+        {
+            method: "DELETE",
+            headers: authHeaders(),
+        }
+    );
+    if (!response.ok) {
+        throw new Error(
+            await getErrorMessage(response, "No se pudo eliminar el horario del empleado")
+        );
+    }
+    return response.text();
+}
+
 
 export async function getBookings() {
     const response = await fetch(`${API_URL}/api/bookings`, {
