@@ -4,6 +4,7 @@ import {
     getEmployees,
     getBookings,
     uploadBusinessImage,
+    editBusiness,
 } from "../../services/authService";
 
 function DashboardSummary({ user, onUserUpdate }) {
@@ -11,6 +12,23 @@ function DashboardSummary({ user, onUserUpdate }) {
     const [employees, setEmployees] = useState([]);
     const [bookings, setBookings] = useState([]);
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [saving, setSaving] = useState(false);
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [address, setAddress] = useState("");
+
+    useEffect(() => {
+        const business = user?.business;
+        if (!business) return;
+
+        setName(business.name || "");
+        setEmail(business.email || "");
+        setPhone(business.phone || "");
+        setAddress(business.address || "");
+    }, [user]);
 
     useEffect(() => {
         const fetchSummary = async () => {
@@ -38,9 +56,37 @@ function DashboardSummary({ user, onUserUpdate }) {
             await uploadBusinessImage(file, type);
             await onUserUpdate();
             setError("");
+            setSuccess(type === "logo" ? "Logo actualizado" : "Portada actualizada");
             e.target.value = "";
         } catch (err) {
+            setSuccess("");
             setError(err.message);
+        }
+    };
+
+    const handleEditBusiness = async (e) => {
+        e.preventDefault();
+        if (saving) return;
+
+        setError("");
+        setSuccess("");
+        setSaving(true);
+
+        try {
+            await editBusiness({
+                name: name.trim(),
+                slug: user.business.slug,
+                email: email.trim(),
+                phone: phone.trim(),
+                address: address.trim(),
+                logo: user.business.logo || "",
+            });
+            await onUserUpdate();
+            setSuccess("Datos del negocio actualizados");
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -193,6 +239,66 @@ function DashboardSummary({ user, onUserUpdate }) {
                 </div>
             </div>
 
+            <div className="dash-business-edit">
+                <h2 className="dash-section-title">Datos del negocio</h2>
+                <p className="dash-business-edit-hint">
+                    Actualiza la información que ven tus clientes en la página pública.
+                </p>
+
+                <form className="dash-business-form" onSubmit={handleEditBusiness}>
+                    <div className="dash-business-field">
+                        <label htmlFor="edit-business-name">Nombre</label>
+                        <input
+                            id="edit-business-name"
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            minLength={2}
+                            maxLength={50}
+                        />
+                    </div>
+
+                    <div className="dash-business-field">
+                        <label htmlFor="edit-business-email">Email</label>
+                        <input
+                            id="edit-business-email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="dash-business-field">
+                        <label htmlFor="edit-business-phone">Teléfono</label>
+                        <input
+                            id="edit-business-phone"
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            placeholder="Opcional"
+                        />
+                    </div>
+
+                    <div className="dash-business-field dash-business-field--full">
+                        <label htmlFor="edit-business-address">Dirección</label>
+                        <input
+                            id="edit-business-address"
+                            type="text"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            placeholder="Opcional"
+                        />
+                    </div>
+
+                    <div className="dash-business-actions">
+                        <button type="submit" disabled={saving}>
+                            {saving ? "Guardando..." : "Guardar cambios"}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
             <div className="dash-images">
                 <h2 className="dash-section-title">Imágenes del negocio</h2>
                 <p className="dash-images-hint">
@@ -238,9 +344,10 @@ function DashboardSummary({ user, onUserUpdate }) {
                         </label>
                     </div>
                 </div>
-
-                {error && <p className="dash-error">{error}</p>}
             </div>
+
+            {success && <p className="dash-success">{success}</p>}
+            {error && <p className="dash-error">{error}</p>}
         </div>
     );
 }

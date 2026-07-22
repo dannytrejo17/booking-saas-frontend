@@ -661,6 +661,132 @@
     margin-bottom: 0;
 }
 
+.dash-business-edit {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.dash-business-edit .dash-section-title {
+    margin-bottom: 0.35rem;
+}
+
+.dash-business-edit-hint {
+    margin: 0 0 1.35rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.dash-business-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.25rem;
+}
+
+.dash-business-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.dash-business-field--full {
+    grid-column: 1 / -1;
+}
+
+.dash-business-field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.dash-business-field input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: #0f172a;
+    background: #fafbfc;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dash-business-field input:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.dash-business-url-preview {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #64748b;
+    word-break: break-all;
+}
+
+.dash-business-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dash-business-actions button {
+    padding: 0.8rem 1.35rem;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #4338ca);
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.dash-business-actions button:hover:not(:disabled) {
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+.dash-business-actions button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.dash-success {
+    margin: 1.25rem 0 0;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #047857;
+    font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+    .dash-business-form {
+        grid-template-columns: 1fr;
+    }
+
+    .dash-business-actions {
+        justify-content: stretch;
+    }
+
+    .dash-business-actions button {
+        width: 100%;
+    }
+}
+
 .dash-placeholder {
     padding: 2.5rem;
     background: #ffffff;

@@ -112,6 +112,18 @@ export async function createBusiness(data) {
     return response.json();
 }
 
+export async function editBusiness(data) {
+    const response = await fetch(`${API_URL}/api/business`, {
+        method: "PUT",
+        headers: authHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "No se pudo actualizar el negocio"));
+    }
+    return response.json();
+}
+
 
 export async function createService(data) {
     const response = await fetch(`${API_URL}/api/services`, {
