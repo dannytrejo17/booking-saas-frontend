@@ -55,6 +55,20 @@ export async function verifyCode(email, code) {
     }
 }
 
+export async function resendCode(email){
+    const response = await fetch(`${API_URL}/api/auth/resendCode`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email })
+    });
+    if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "No se pudo reenviar el código"));
+    }
+    return response.json();
+}
+
 
 function authHeaders() {
     return {

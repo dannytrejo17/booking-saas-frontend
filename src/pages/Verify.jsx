@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { verifyCode } from "../services/authService";
+import { verifyCode, resendCode } from "../services/authService";
 import "./Register.css";
 
 function Verify() {
     const [code, setCode] = useState("");
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [resending, setResending] = useState(false);
     const location = useLocation();
     const email = location.state?.email || sessionStorage.getItem("verifyEmail") || "";
     const navigate = useNavigate();
@@ -22,6 +24,24 @@ function Verify() {
             setError(error.message);
         }
     };
+
+    const handleResendCode = async () => {
+
+        if(!email || resending) return;
+
+        setError("");
+        setSuccess("");
+        setResending(true);
+
+        try{
+            await resendCode(email);
+            setSuccess("Te enviamos un nuevo código. Revisa tu email.");
+        }catch(err){
+            setError(err.message);
+        }finally{
+            setResending(false);
+        }
+    }
 
     return (
         <div className="register-page">
@@ -100,6 +120,21 @@ function Verify() {
                         </Link>
                     )}
 
+                    {email && (
+                        <p className="register-footer">
+                            ¿No te llegó el código?{" "}
+                            <button
+                                type="button"
+                                className="register-link-btn"
+                                onClick={handleResendCode}
+                                disabled={resending}
+                            >
+                                {resending ? "Reenviando..." : "Reenviar código"}
+                            </button>
+                        </p>
+                    )}
+
+                    {success && <p className="register-success">{success}</p>}
                     {error && <p className="register-error">{error}</p>}
                     <p className="register-footer">
                         ¿Ya verificaste? <Link to="/login">Inicia sesión</Link>
