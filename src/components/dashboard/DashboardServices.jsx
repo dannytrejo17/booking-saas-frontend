@@ -94,7 +94,7 @@ function DashboardServices() {
                 />
                 <input
                     type="number"
-                    placeholder="Precio (€)"
+                    placeholder="Precio (S/)"
                     value={servicePrice}
                     onChange={(e) => setServicePrice(e.target.value)}
                 />
@@ -119,7 +119,7 @@ function DashboardServices() {
                 {services.map((service) => (
                     <div key={service.id} className="dash-service-card">
                         <h3>{service.name}</h3>
-                        <p className="dash-service-price">{service.price} €</p>
+                        <p className="dash-service-price">S/ {service.price}</p>
                         <p className="dash-service-duration">{service.duration} min</p>
                         <button
                             type="button"

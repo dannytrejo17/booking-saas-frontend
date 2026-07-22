@@ -250,7 +250,7 @@ function PublicBooking() {
                                         )}
                                     </div>
                                     <p className="public-service-price">
-                                        {Number(service.price).toFixed(2)}€
+                                        S/ {Number(service.price).toFixed(2)}
                                     </p>
                                 </button>
                             ))}
@@ -304,7 +304,7 @@ function PublicBooking() {
                                         <div className="public-summary-item">
                                             <span className="public-summary-label">Precio</span>
                                             <span className="public-summary-value public-summary-price">
-                                                {Number(selectedService.price).toFixed(2)}€
+                                                S/ {Number(selectedService.price).toFixed(2)}
                                             </span>
                                         </div>
                                     )}
@@ -323,7 +323,7 @@ function PublicBooking() {
                                     <option value="">Selecciona servicio</option>
                                     {services.map((service) => (
                                         <option key={service.id} value={service.id}>
-                                            {service.name} — {Number(service.price).toFixed(2)}€
+                                            {service.name} — S/ {Number(service.price).toFixed(2)}
                                         </option>
                                     ))}
                                 </select>

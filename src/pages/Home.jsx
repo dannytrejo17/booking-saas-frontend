@@ -236,15 +236,15 @@ function Home() {
                                 <p className="home-mockup-phone-title">Reservar cita</p>
                                 <div className="home-mockup-service">
                                     <span>Corte</span>
-                                    <strong>€15</strong>
+                                    <strong>S/ 15</strong>
                                 </div>
                                 <div className="home-mockup-service">
                                     <span>Manicura</span>
-                                    <strong>€20</strong>
+                                    <strong>S/ 20</strong>
                                 </div>
                                 <div className="home-mockup-service">
                                     <span>Masaje</span>
-                                    <strong>€35</strong>
+                                    <strong>S/ 35</strong>
                                 </div>
                                 <div className="home-mockup-phone-btn">Reservar</div>
                             </div>
