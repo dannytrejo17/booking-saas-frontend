@@ -38,9 +38,12 @@ export async function getPublicEmployees(slug) {
 export async function getAvailability(slug, serviceId, employeeId, date) {
     const params = new URLSearchParams({
         serviceId: String(serviceId),
-        employeeId: String(employeeId),
         date,
     });
+
+    if (employeeId != null && employeeId !== "" && employeeId !== "any") {
+        params.set("employeeId", String(employeeId));
+    }
 
     const response = await fetch(
         `${API_URL}/api/public/${slug}/bookings/availability?${params}`

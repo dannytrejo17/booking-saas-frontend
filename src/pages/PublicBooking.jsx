@@ -125,6 +125,7 @@ function PublicBooking() {
 
     const selectedService = services.find((s) => String(s.id) === serviceId);
     const selectedEmployee = employees.find((e) => String(e.id) === employeeId);
+    const anyProfessional = employeeId === "any";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -132,13 +133,17 @@ function PublicBooking() {
         setSubmitting(true);
 
         try {
-            await createPublicBooking(slug, {
+            const bookingData = {
                 serviceId: Number(serviceId),
-                employeeId: Number(employeeId),
                 startAt,
                 customerName,
                 customerPhone,
-            });
+            };
+            if (!anyProfessional) {
+                bookingData.employeeId = Number(employeeId);
+            }
+
+            await createPublicBooking(slug, bookingData);
             setSuccess("¡Reserva confirmada! Te esperamos.");
             setServiceId("");
             setEmployeeId("");
@@ -265,6 +270,14 @@ function PublicBooking() {
                             <p>Elige con quién quieres tu cita</p>
                         </div>
                         <div className="public-grid public-grid-team">
+                            <button
+                                type="button"
+                                className={`public-team-card ${anyProfessional ? "selected" : ""}`}
+                                onClick={() => setEmployeeId("any")}
+                            >
+                                <span className="public-team-avatar public-team-avatar--any">?</span>
+                                <span className="public-team-name">Cualquier profesional</span>
+                            </button>
                             {employees.map((employee) => (
                                 <button
                                     key={employee.id}
@@ -286,7 +299,7 @@ function PublicBooking() {
                             <h2>Completa tu reserva</h2>
                             <p>Indica fecha, hora y tus datos de contacto</p>
 
-                            {(selectedService || selectedEmployee) && (
+                            {(selectedService || selectedEmployee || anyProfessional) && (
                                 <div className="public-booking-summary">
                                     {selectedService && (
                                         <div className="public-summary-item">
@@ -294,10 +307,12 @@ function PublicBooking() {
                                             <span className="public-summary-value">{selectedService.name}</span>
                                         </div>
                                     )}
-                                    {selectedEmployee && (
+                                    {(selectedEmployee || anyProfessional) && (
                                         <div className="public-summary-item">
                                             <span className="public-summary-label">Profesional</span>
-                                            <span className="public-summary-value">{selectedEmployee.name}</span>
+                                            <span className="public-summary-value">
+                                                {anyProfessional ? "Cualquier profesional" : selectedEmployee.name}
+                                            </span>
                                         </div>
                                     )}
                                     {selectedService && (
@@ -337,6 +352,7 @@ function PublicBooking() {
                                     onChange={(e) => setEmployeeId(e.target.value)}
                                 >
                                     <option value="">Selecciona profesional</option>
+                                    <option value="any">Cualquier profesional</option>
                                     {employees.map((employee) => (
                                         <option key={employee.id} value={employee.id}>
                                             {employee.name}
