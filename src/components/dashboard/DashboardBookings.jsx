@@ -119,6 +119,9 @@ function DashboardBookings() {
     return (
         <div className="dash-section">
             <h2 className="dash-section-title">Reservas</h2>
+            <p className="dash-section-hint">
+                Puedes cambiar el servicio, empleado, fecha u otros datos de una reserva con el botón Editar.
+            </p>
 
             <form className="dash-form dash-form-booking" onSubmit={handleSubmitBooking}>
                 <select

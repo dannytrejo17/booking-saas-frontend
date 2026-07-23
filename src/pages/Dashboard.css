@@ -831,6 +831,22 @@
     letter-spacing: -0.02em;
 }
 
+.dash-section-title:has(+ .dash-section-hint) {
+    margin-bottom: 0.4rem;
+}
+
+.dash-section-hint {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.925rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: #3730a3;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 10px;
+}
+
 .dash-form {
     display: grid;
     grid-template-columns: 1fr 140px 160px auto;
