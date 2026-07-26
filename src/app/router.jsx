@@ -7,6 +7,7 @@ import Register from "../features/auth/pages/Register";
 import PublicBooking from "../features/public-booking/pages/PublicBooking";
 import Verify from "../features/auth/pages/Verify";
 import PublicReview from "../features/reviews/pages/PublicReview";
+import PublicBusinessReviews from "../features/reviews/pages/PublicBusinessReviews";
 import Summary from "../features/dashboard/pages/Summary";
 import ServicesPanel from "../features/services/components/ServicesPanel";
 import EmployeesPanel from "../features/employees/components/EmployeesPanel";
@@ -28,6 +29,7 @@ function AppRouter() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/verify" element={<Verify />} />
                 <Route path="/reservar/:slug" element={<PublicBooking />} />
+                <Route path="/reservar/:slug/reseñas" element={<PublicBusinessReviews />} />
                 <Route path="/reseña" element={<PublicReview />} />
                 <Route
                     path="/dashboard"

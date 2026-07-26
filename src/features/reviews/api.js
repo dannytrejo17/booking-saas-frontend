@@ -38,3 +38,21 @@ export async function createReview(token, customerName, rating, comment) {
     }
     return response.json();
 }
+
+
+export async function getPublicReviews(slug, page = 0, size = 10) {
+    const params = new URLSearchParams({
+        page: String(page),
+        size: String(size)
+    });
+
+    const response = await fetch(
+        `${API_URL}/api/public/reviews/${slug}?${params}`
+    );
+
+    if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "No se pudieron cargar las reseñas"));
+    }
+
+    return response.json();
+}

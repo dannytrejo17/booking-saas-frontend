@@ -647,6 +647,143 @@
     margin: 0;
 }
 
+/* Reseñas públicas */
+.public-reviews-section {
+    margin-top: 2.5rem;
+    padding-top: 0.5rem;
+}
+
+.public-reviews-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.75rem 1.25rem;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    color: #64748b;
+    font-size: 0.925rem;
+}
+
+.public-reviews-status p {
+    margin: 0;
+}
+
+.public-reviews-status--empty {
+    text-align: center;
+}
+
+.public-reviews-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.public-review-item {
+    display: flex;
+    gap: 0.9rem;
+    padding: 1.25rem 1.35rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.public-review-item:hover {
+    border-color: #c7d2fe;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.08);
+    transform: translateY(-1px);
+}
+
+.public-review-avatar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.public-review-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.public-review-item-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+    margin-bottom: 0.45rem;
+}
+
+.public-review-item-top strong {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.public-review-rating {
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: #f59e0b;
+    line-height: 1;
+}
+
+.public-review-rating-empty {
+    color: #e2e8f0;
+}
+
+.public-review-comment {
+    margin: 0 0 0.65rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #475569;
+}
+
+.public-review-date {
+    display: block;
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.public-reviews-more {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    margin: 1.25rem auto 0;
+    padding: 0.85rem 1.25rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    color: #4338ca;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.public-reviews-more:hover:not(:disabled) {
+    border-color: #a5b4fc;
+    background: #eef2ff;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.12);
+}
+
+.public-reviews-more:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .public-booking-layout {

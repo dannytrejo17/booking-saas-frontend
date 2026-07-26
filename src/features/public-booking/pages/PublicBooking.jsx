@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
     getPublicBusiness,
@@ -7,6 +7,7 @@ import {
     getAvailability,
     createPublicBooking,
 } from "../api";
+import { getPublicReviews } from "../../reviews/api";
 import "./PublicBooking.css";
 
 function getInitials(name) {
@@ -36,6 +37,9 @@ function PublicBooking() {
     const [customerPhone, setCustomerPhone] = useState("");
     const [success, setSuccess] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [reviews, setReviews] = useState([]);
+    const [reviewTotalPages, setReviewTotalPages] = useState(0);
+    const [reviewsLoading, setReviewsLoading] = useState(false);
 
     const now = new Date();
     const today = [
@@ -89,6 +93,27 @@ function PublicBooking() {
 
         fetchSlots();
     }, [slug, serviceId, employeeId, date]);
+
+
+
+    useEffect(() => {
+        if (!slug) return;
+
+        const fetchReviews = async () => {
+            setReviewsLoading(true);
+            try {
+                const data = await getPublicReviews(slug, 0, 10);
+                setReviews(data.content || []);
+                setReviewTotalPages(data.totalPages || 0);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setReviewsLoading(false);
+            }
+        };
+
+        fetchReviews();
+    }, [slug]);
 
     if (loading) {
         return (
@@ -458,6 +483,70 @@ function PublicBooking() {
                             </svg>
                             <span>{success}</span>
                         </div>
+                    )}
+                </section>
+
+                <section className="public-section public-reviews-section">
+                    <div className="public-section-header">
+                        <h2>Reseñas</h2>
+                        <p>Lo que dicen nuestros clientes</p>
+                    </div>
+
+                    {reviewsLoading && reviews.length === 0 && (
+                        <div className="public-reviews-status">
+                            <div className="public-loading-spinner public-loading-spinner-sm" />
+                            <p>Cargando reseñas...</p>
+                        </div>
+                    )}
+
+                    {!reviewsLoading && reviews.length === 0 && (
+                        <div className="public-reviews-status public-reviews-status--empty">
+                            <p>Aún no hay reseñas</p>
+                        </div>
+                    )}
+
+                    {reviews.length > 0 && (
+                        <div className="public-reviews-list">
+                            {reviews.map((review, index) => (
+                                <article
+                                    key={`${review.customerName}-${review.createdAt}-${index}`}
+                                    className="public-review-item"
+                                >
+                                    <div className="public-review-avatar" aria-hidden="true">
+                                        {getInitials(review.customerName || "?")}
+                                    </div>
+                                    <div className="public-review-body">
+                                        <div className="public-review-item-top">
+                                            <strong>{review.customerName}</strong>
+                                            <span className="public-review-rating" aria-label={`${review.rating || 0} de 5`}>
+                                                {"★".repeat(review.rating || 0)}
+                                                <span className="public-review-rating-empty">
+                                                    {"★".repeat(Math.max(0, 5 - (review.rating || 0)))}
+                                                </span>
+                                            </span>
+                                        </div>
+                                        {review.comment && (
+                                            <p className="public-review-comment">{review.comment}</p>
+                                        )}
+                                        {review.createdAt && (
+                                            <time className="public-review-date" dateTime={review.createdAt}>
+                                                {new Date(review.createdAt).toLocaleDateString("es-ES", {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                })}
+                                            </time>
+                                        )}
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                    )}
+
+                    {reviewTotalPages > 1 && (
+                        <Link to={`/reservar/${slug}/reseñas`} className="public-reviews-more">
+                            Ver más reseñas
+                        </Link>
                     )}
                 </section>
             </main>
