@@ -1,6 +1,7 @@
-function Sidebar({ user, active, onChangeSection, onLogout, open, onClose }) {
-    const handleSection = (section) => {
-        onChangeSection(section);
+import { NavLink } from "react-router-dom";
+
+function Sidebar({ user, onLogout, open, onClose }) {
+    const handleNav = () => {
         onClose?.();
     };
 
@@ -31,48 +32,55 @@ function Sidebar({ user, active, onChangeSection, onLogout, open, onClose }) {
                 </div>
 
                 <nav className="sidebar-nav">
-                    <button
-                        className={`sidebar-btn ${active === "resumen" ? "active" : ""}`}
-                        onClick={() => handleSection("resumen")}
+                    <NavLink
+                        to="/dashboard"
+                        end
+                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
+                        onClick={handleNav}
                     >
                         <span className="sidebar-btn-icon">▦</span>
                         Resumen
-                    </button>
-                    <button
-                        className={`sidebar-btn ${active === "servicios" ? "active" : ""}`}
-                        onClick={() => handleSection("servicios")}
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard/servicios"
+                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
+                        onClick={handleNav}
                     >
                         <span className="sidebar-btn-icon">📋</span>
                         Servicios
-                    </button>
-                    <button
-                        className={`sidebar-btn ${active === "empleados" ? "active" : ""}`}
-                        onClick={() => handleSection("empleados")}
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard/empleados"
+                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
+                        onClick={handleNav}
                     >
                         <span className="sidebar-btn-icon">👤</span>
                         Empleados
-                    </button>
-                    <button
-                        className={`sidebar-btn ${active === "reservas" ? "active" : ""}`}
-                        onClick={() => handleSection("reservas")}
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard/reservas"
+                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
+                        onClick={handleNav}
                     >
                         <span className="sidebar-btn-icon">📅</span>
                         Reservas
-                    </button>
-                    <button
-                        className={`sidebar-btn ${active === "horarios" ? "active" : ""}`}
-                        onClick={() => handleSection("horarios")}
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard/horarios"
+                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
+                        onClick={handleNav}
                     >
                         <span className="sidebar-btn-icon">🕐</span>
                         Horarios
-                    </button>
-                    <button
-                    className={`sidebar-btn ${active === "reseñas" ? "active" : ""}`}
-                    onClick={() => handleSection("reseñas")}
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard/reseñas"
+                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
+                        onClick={handleNav}
                     >
                         <span className="sidebar-btn-icon">💬</span>
                         Reseñas
-                    </button>
+                    </NavLink>
                 </nav>
 
                 <div className="sidebar-footer">

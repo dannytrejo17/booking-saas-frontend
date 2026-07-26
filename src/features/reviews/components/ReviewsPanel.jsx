@@ -17,12 +17,14 @@ function ReviewsPanel() {
         try {
             const inviteUrl =await reviewInvitation(phone);
             setInvitationUrl(inviteUrl);
+            setError("");
             if (inviteUrl.whatsappUrl?.startsWith("https://wa.me/")) {
                 window.open(inviteUrl.whatsappUrl, "_blank", "noopener,noreferrer");
             }
             setPhone("");
             
         } catch (err) {
+            setInvitationUrl(null);
             setError(err.message);
         }
     }

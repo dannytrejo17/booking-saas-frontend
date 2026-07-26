@@ -26,8 +26,10 @@ function PublicReview() {
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
+        setError(null);
+        setSuccess(null);
         try{
-            await createReview(token, customerName, rating, comment);
+            await createReview(token, customerName, Number(rating), comment);
             setCustomerName("");
             setRating(0);
             setComment("");
