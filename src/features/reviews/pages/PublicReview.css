@@ -1,0 +1,218 @@
+.public-review-page {
+    min-height: 100vh;
+    background: #f4f6fb;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    color: #0f172a;
+}
+
+.public-review-invalid {
+    max-width: 400px;
+    margin: 20vh auto 0;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #fecaca;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.public-review-invalid-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.public-review-invalid h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.public-review-invalid p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.public-review-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 3.5rem 1.5rem 4.5rem;
+    color: #fff;
+    background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 45%, #4338ca 100%);
+}
+
+.public-review-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.35) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.25) 0%, transparent 45%);
+    pointer-events: none;
+}
+
+.public-review-hero-inner {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.public-review-badge {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #c7d2fe;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.public-review-hero h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+}
+
+.public-review-hero p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #94a3b8;
+}
+
+.public-review-main {
+    max-width: 520px;
+    margin: -2.5rem auto 0;
+    padding: 0 1.25rem 4rem;
+    position: relative;
+}
+
+.public-review-card {
+    padding: 2rem 1.75rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+}
+
+.public-review-card h2 {
+    margin: 0 0 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+}
+
+.public-review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.public-review-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.public-review-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.public-review-form input,
+.public-review-form textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #0f172a;
+    background: #fafbfc;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.public-review-form input:focus,
+.public-review-form textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.public-review-form input::placeholder,
+.public-review-form textarea::placeholder {
+    color: #94a3b8;
+}
+
+.public-review-form button[type="submit"] {
+    margin-top: 0.35rem;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1, #4338ca);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+    transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.public-review-form button[type="submit"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(99, 102, 241, 0.45);
+}
+
+.public-review-error {
+    margin: 1.25rem 0 0;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.public-review-success {
+    margin: 1.25rem 0 0;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #059669;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .public-review-hero {
+        padding: 2.75rem 1.25rem 3.75rem;
+    }
+
+    .public-review-card {
+        padding: 1.5rem 1.25rem;
+        border-radius: 16px;
+    }
+}
