@@ -14,6 +14,7 @@ import EmployeesPanel from "../features/employees/components/EmployeesPanel";
 import BookingsPanel from "../features/bookings/components/BookingsPanel";
 import SchedulesPanel from "../features/schedules/components/SchedulesPanel";
 import ReviewsPanel from "../features/reviews/components/ReviewsPanel";
+import Guide from "../features/dashboard/pages/Guide";
 
 function DashboardSummary() {
     const { user, refreshUser } = useOutletContext();
@@ -45,6 +46,7 @@ function AppRouter() {
                     <Route path="reservas" element={<BookingsPanel />} />
                     <Route path="horarios" element={<SchedulesPanel />} />
                     <Route path="reseñas" element={<ReviewsPanel />} />
+                    <Route path="guia" element={<Guide />} />
                 </Route>
             </Routes>
         </BrowserRouter>

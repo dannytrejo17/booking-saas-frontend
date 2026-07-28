@@ -81,6 +81,14 @@ function Sidebar({ user, onLogout, open, onClose }) {
                         <span className="sidebar-btn-icon">💬</span>
                         Reseñas
                     </NavLink>
+                    <NavLink
+                        to="/dashboard/guia"
+                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
+                        onClick={handleNav}
+                    >
+                        <span className="sidebar-btn-icon">?</span>
+                        Cómo usar
+                    </NavLink>
                 </nav>
 
                 <div className="sidebar-footer">
