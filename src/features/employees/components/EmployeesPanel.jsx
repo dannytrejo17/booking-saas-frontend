@@ -95,6 +95,10 @@ function EmployeesPanel() {
     return (
         <div className="dash-section">
             <h2 className="dash-section-title">Empleados</h2>
+            <p className="dash-section-hint">
+                Añade a tu equipo. En la página pública el cliente podrá elegir un profesional
+                o “cualquier profesional”. Puedes activar o desactivar a alguien cuando no esté disponible.
+            </p>
 
             <form className="dash-form dash-form-inline" onSubmit={handleSubmitEmployee}>
                 <input

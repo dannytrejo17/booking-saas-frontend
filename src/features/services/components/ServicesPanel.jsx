@@ -90,6 +90,10 @@ function ServicesPanel() {
     return (
         <div className="dash-section">
             <h2 className="dash-section-title">Servicios</h2>
+            <p className="dash-section-hint">
+                Aquí defines lo que ofreces: nombre, precio y duración. Es lo que verán tus clientes
+                al reservar online y condiciona los huecos disponibles en la agenda.
+            </p>
 
             <form className="dash-form" onSubmit={handleSubmitService}>
                 <input

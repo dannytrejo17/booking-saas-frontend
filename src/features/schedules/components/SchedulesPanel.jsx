@@ -179,6 +179,10 @@ function SchedulesPanel() {
     return (
         <div className="dash-section">
             <h2 className="dash-section-title">Horarios del negocio</h2>
+            <p className="dash-section-hint">
+                Necesario para las reservas online. Define los días y horas de apertura del negocio;
+                sin esto, los clientes no verán horarios disponibles al reservar.
+            </p>
 
             <form className="dash-form" onSubmit={handleCreateSchedule}>
                 <select
@@ -240,6 +244,9 @@ function SchedulesPanel() {
             <h2 className="dash-section-title" style={{ marginTop: "2.5rem" }}>
                 Horarios por empleado
             </h2>
+            <p className="dash-section-hint">
+                Elige empleado, día y horario. Sin esto, ese empleado no recibirá reservas online.
+            </p>
 
             <form className="dash-form" onSubmit={handleCreateEmployeeSchedule}>
                 <select
