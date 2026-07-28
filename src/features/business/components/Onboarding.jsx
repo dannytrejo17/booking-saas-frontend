@@ -5,6 +5,7 @@ function Onboarding({ onBusinessCreated }) {
     const [name, setName] = useState("");
     const [slug, setSlug] = useState("");
     const [email, setEmail] = useState("");
+    const [currency, setCurrency] = useState("EUR");
     const [error, setError] = useState("");
 
     const handleCreateBusiness = async (e) => {
@@ -18,6 +19,7 @@ function Onboarding({ onBusinessCreated }) {
                 phone: "",
                 address: "",
                 logo: "",
+                currency,
             });
             onBusinessCreated();
         } catch (err) {
@@ -97,6 +99,23 @@ function Onboarding({ onBusinessCreated }) {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
+                    </div>
+
+                    <div className="onboarding-field">
+                        <label htmlFor="business-currency">Moneda</label>
+                        <p className="onboarding-hint">
+                            Así se mostrarán los precios a tus clientes.
+                        </p>
+                        <select
+                            id="business-currency"
+                            value={currency}
+                            onChange={(e) => setCurrency(e.target.value)}
+                            required
+                        >
+                            <option value="EUR">Euro (€)</option>
+                            <option value="PEN">Sol peruano (S/)</option>
+                            <option value="USD">Dólar (US$)</option>
+                        </select>
                     </div>
 
                     <button type="submit">Crear mi negocio</button>

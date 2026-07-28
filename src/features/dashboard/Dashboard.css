@@ -708,7 +708,8 @@
     color: #0f172a;
 }
 
-.dash-business-field input {
+.dash-business-field input,
+.dash-business-field select {
     width: 100%;
     padding: 0.8rem 1rem;
     border: 1px solid #e2e8f0;
@@ -721,7 +722,8 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.dash-business-field input:focus {
+.dash-business-field input:focus,
+.dash-business-field select:focus {
     outline: none;
     border-color: #6366f1;
     background: #ffffff;
@@ -1379,7 +1381,8 @@
     font-weight: 600;
 }
 
-.onboarding-form input {
+.onboarding-form input,
+.onboarding-form select {
     padding: 0.85rem 1rem;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
@@ -1388,7 +1391,8 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.onboarding-form input:focus {
+.onboarding-form input:focus,
+.onboarding-form select:focus {
     outline: none;
     border-color: #6366f1;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);

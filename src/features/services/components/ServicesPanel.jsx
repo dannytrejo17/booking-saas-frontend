@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import {
     getServices,
     createService,
     editService,
     deleteService,
 } from "../api";
+import { formatPrice, getCurrencySymbol } from "../../../shared/currency";
 
 function ServicesPanel() {
+    const { user } = useOutletContext();
+    const currency = user?.business?.currency || "EUR";
+    const currencySymbol = getCurrencySymbol(currency);
+
     const [services, setServices] = useState([]);
     const [serviceName, setServiceName] = useState("");
     const [servicePrice, setServicePrice] = useState("");
@@ -94,7 +100,7 @@ function ServicesPanel() {
                 />
                 <input
                     type="number"
-                    placeholder="Precio (S/)"
+                    placeholder={`Precio (${currencySymbol})`}
                     value={servicePrice}
                     onChange={(e) => setServicePrice(e.target.value)}
                 />
@@ -119,7 +125,7 @@ function ServicesPanel() {
                 {services.map((service) => (
                     <div key={service.id} className="dash-service-card">
                         <h3>{service.name}</h3>
-                        <p className="dash-service-price">S/ {service.price}</p>
+                        <p className="dash-service-price">{formatPrice(service.price, currency)}</p>
                         <p className="dash-service-duration">{service.duration} min</p>
                         <button
                             type="button"

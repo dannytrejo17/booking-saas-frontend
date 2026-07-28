@@ -8,6 +8,7 @@ import {
     createPublicBooking,
 } from "../api";
 import { getPublicReviews } from "../../reviews/api";
+import { formatPrice } from "../../../shared/currency";
 import "./PublicBooking.css";
 
 function getInitials(name) {
@@ -280,7 +281,7 @@ function PublicBooking() {
                                         )}
                                     </div>
                                     <p className="public-service-price">
-                                        S/ {Number(service.price).toFixed(2)}
+                                        {formatPrice(service.price, business.currency)}
                                     </p>
                                 </button>
                             ))}
@@ -344,7 +345,7 @@ function PublicBooking() {
                                         <div className="public-summary-item">
                                             <span className="public-summary-label">Precio</span>
                                             <span className="public-summary-value public-summary-price">
-                                                S/ {Number(selectedService.price).toFixed(2)}
+                                                {formatPrice(selectedService.price, business.currency)}
                                             </span>
                                         </div>
                                     )}
@@ -363,7 +364,7 @@ function PublicBooking() {
                                     <option value="">Selecciona servicio</option>
                                     {services.map((service) => (
                                         <option key={service.id} value={service.id}>
-                                            {service.name} — S/ {Number(service.price).toFixed(2)}
+                                            {service.name} — {formatPrice(service.price, business.currency)}
                                         </option>
                                     ))}
                                 </select>

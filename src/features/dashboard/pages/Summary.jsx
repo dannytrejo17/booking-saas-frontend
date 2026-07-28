@@ -16,6 +16,7 @@ function Summary({ user, onUserUpdate }) {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
+    const [currency, setCurrency] = useState("EUR");
 
     useEffect(() => {
         const business = user?.business;
@@ -25,6 +26,7 @@ function Summary({ user, onUserUpdate }) {
         setEmail(business.email || "");
         setPhone(business.phone || "");
         setAddress(business.address || "");
+        setCurrency(business.currency || "EUR");
     }, [user]);
 
     useEffect(() => {
@@ -77,6 +79,7 @@ function Summary({ user, onUserUpdate }) {
                 phone: phone.trim(),
                 address: address.trim(),
                 logo: user.business.logo || "",
+                currency,
             });
             await onUserUpdate();
             setSuccess("Datos del negocio actualizados");
@@ -286,6 +289,20 @@ function Summary({ user, onUserUpdate }) {
                             onChange={(e) => setAddress(e.target.value)}
                             placeholder="Opcional"
                         />
+                    </div>
+
+                    <div className="dash-business-field">
+                        <label htmlFor="edit-business-currency">Moneda</label>
+                        <select
+                            id="edit-business-currency"
+                            value={currency}
+                            onChange={(e) => setCurrency(e.target.value)}
+                            required
+                        >
+                            <option value="EUR">Euro (€)</option>
+                            <option value="PEN">Sol peruano (S/)</option>
+                            <option value="USD">Dólar (US$)</option>
+                        </select>
                     </div>
 
                     <div className="dash-business-actions">
