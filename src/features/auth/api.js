@@ -69,6 +69,34 @@ export async function resendCode(email){
     return response.json();
 }
 
+export async function forgotPassword(email) {
+    const response = await fetch(`${API_URL}/api/auth/forgotPassword`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email })
+    });
+    if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "No se pudo enviar el código de recuperación"));
+    }
+    return response.json();
+}
+
+export async function resetPassword(email, code, password) {
+    const response = await fetch(`${API_URL}/api/auth/resetPassword`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, code, password })
+    });
+    if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "No se pudo actualizar la contraseña"));
+    }
+    return response.json();
+}
+
 
 function authHeaders() {
     return {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login } from "../api";
 import "./Login.css";
 
@@ -7,6 +7,8 @@ function Login(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const location = useLocation();
+    const [success] = useState(location.state?.message || "");
     const navigate = useNavigate();
 
     const handlelogin = async (e) => {
@@ -85,12 +87,16 @@ function Login(){
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+                            <p className="login-forgot">
+                                <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+                            </p>
                         </div>
                         <button className="login-button" type="submit">
                             Entrar
                             <span aria-hidden="true">→</span>
                         </button>
                     </form>
+                    {success && <p className="login-success">{success}</p>}
                     {error && <p className="login-error">{error}</p>}
                     <p className="login-footer">
                         ¿No tienes cuenta? <Link to="/register">Regístrate gratis</Link>
