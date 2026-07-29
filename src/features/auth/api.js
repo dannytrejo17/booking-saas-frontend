@@ -1,6 +1,6 @@
 import { getErrorMessage } from "../../shared/api/apiError";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function login(email, password) {
     const response = await fetch(`${API_URL}/api/auth/login`, {
@@ -116,10 +116,12 @@ export async function getMe() {
     return response.json();
 }
 
-export function getToken() {
-    return localStorage.getItem("token");
-}
 
+export function getToken() {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem("token");
+  }
+  
 
 export function logout() {
     localStorage.removeItem("token");

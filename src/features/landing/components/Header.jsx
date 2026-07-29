@@ -1,10 +1,13 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getToken, logout } from "../../auth/api";
 import "./Header.css";
 
 function Header({ variant }) {
-    const navigate = useNavigate();
+    const router = useRouter();
     const token = getToken();
     const isLanding = variant === "landing";
     const [menuOpen, setMenuOpen] = useState(false);
@@ -12,7 +15,7 @@ function Header({ variant }) {
     const handleLogout = () => {
         logout();
         setMenuOpen(false);
-        navigate("/login");
+        router.push("/login");
     };
 
     const closeMenu = () => setMenuOpen(false);
@@ -44,7 +47,7 @@ function Header({ variant }) {
 
     return (
         <header className={`header${isLanding ? " header--landing" : ""}${menuOpen ? " header--menu-open" : ""}`}>
-            <Link to="/" className="header-logo" onClick={closeMenu}>
+            <Link href="/" className="header-logo" onClick={closeMenu}>
                 <img
                     src="/brand/turnexa-logo.png"
                     alt=""
@@ -58,17 +61,17 @@ function Header({ variant }) {
             <div className="header-actions header-actions--desktop">
                 {token ? (
                     <>
-                        <Link to="/dashboard" className="header-link">Dashboard</Link>
+                        <Link href="/dashboard" className="header-link">Dashboard</Link>
                         <button className="header-btn header-btn-outline" onClick={handleLogout}>
                             Cerrar sesión
                         </button>
                     </>
                 ) : (
                     <>
-                        <button className="header-link" onClick={() => navigate("/login")}>
+                        <button className="header-link" onClick={() => router.push("/login")}>
                             Iniciar sesión
                         </button>
-                        <Link to="/register" className="header-btn">
+                        <Link href="/register" className="header-btn">
                             Prueba gratis
                         </Link>
                     </>
@@ -100,7 +103,7 @@ function Header({ variant }) {
                 <div className="header-mobile-actions">
                     {token ? (
                         <>
-                            <Link to="/dashboard" className="header-btn" onClick={closeMenu}>
+                            <Link href="/dashboard" className="header-btn" onClick={closeMenu}>
                                 Dashboard
                             </Link>
                             <button className="header-btn header-btn-outline" onClick={handleLogout}>
@@ -113,12 +116,12 @@ function Header({ variant }) {
                                 className="header-btn header-btn-outline"
                                 onClick={() => {
                                     closeMenu();
-                                    navigate("/login");
+                                    router.push("/login");
                                 }}
                             >
                                 Iniciar sesión
                             </button>
-                            <Link to="/register" className="header-btn" onClick={closeMenu}>
+                            <Link href="/register" className="header-btn" onClick={closeMenu}>
                                 Prueba gratis
                             </Link>
                         </>

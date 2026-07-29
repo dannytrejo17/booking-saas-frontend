@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { login } from "../api";
 import "./Login.css";
 
@@ -7,9 +10,16 @@ function Login(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const location = useLocation();
-    const [success] = useState(location.state?.message || "");
-    const navigate = useNavigate();
+    const [success, setSuccess] = useState("");
+    const router = useRouter();
+
+    useEffect(() => {
+        const message = sessionStorage.getItem("loginMessage");
+        if (message) {
+            setSuccess(message);
+            sessionStorage.removeItem("loginMessage");
+        }
+    }, []);
 
     const handlelogin = async (e) => {
         e.preventDefault();
@@ -18,7 +28,7 @@ function Login(){
         try{
             const token = await login(email, password);
             localStorage.setItem("token", token);
-            navigate("/dashboard");
+            router.push("/dashboard");
         } catch (error) {
             console.error(error);
             setError(error.message);
@@ -88,7 +98,7 @@ function Login(){
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <p className="login-forgot">
-                                <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+                                <Link href="/forgot-password">¿Olvidaste tu contraseña?</Link>
                             </p>
                         </div>
                         <button className="login-button" type="submit">
@@ -99,7 +109,7 @@ function Login(){
                     {success && <p className="login-success">{success}</p>}
                     {error && <p className="login-error">{error}</p>}
                     <p className="login-footer">
-                        ¿No tienes cuenta? <Link to="/register">Regístrate gratis</Link>
+                        ¿No tienes cuenta? <Link href="/register">Regístrate gratis</Link>
                     </p>
                 </div>
             </main>

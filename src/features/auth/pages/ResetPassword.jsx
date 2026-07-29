@@ -1,19 +1,30 @@
-import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { forgotPassword, resetPassword } from "../api";
 import "./Register.css";
 
 function ResetPassword() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const email = location.state?.email || sessionStorage.getItem("resetEmail") || "";
+    const router = useRouter();
+    const [email, setEmail] = useState("");
     const [code, setCode] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState(location.state?.message || "");
+    const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
     const [resending, setResending] = useState(false);
+
+    useEffect(() => {
+        setEmail(sessionStorage.getItem("resetEmail") || "");
+        const message = sessionStorage.getItem("resetMessage");
+        if (message) {
+            setSuccess(message);
+            sessionStorage.removeItem("resetMessage");
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,9 +44,11 @@ function ResetPassword() {
         try {
             await resetPassword(email, code.trim(), password);
             sessionStorage.removeItem("resetEmail");
-            navigate("/login", {
-                state: { message: "Contraseña actualizada. Ya puedes iniciar sesión." },
-            });
+            sessionStorage.setItem(
+                "loginMessage",
+                "Contraseña actualizada. Ya puedes iniciar sesión."
+            );
+            router.push("/login");
         } catch (err) {
             setError(err.message);
         } finally {
@@ -50,7 +63,9 @@ function ResetPassword() {
         setResending(true);
         try {
             const data = await forgotPassword(email);
-            setSuccess(data?.message || "Si el email existe, te enviamos un codigo de recuperacion");
+            setSuccess(
+                data?.message || "Si el email existe, te enviamos un codigo de recuperacion"
+            );
         } catch (err) {
             setError(err.message);
         } finally {
@@ -154,7 +169,7 @@ function ResetPassword() {
                             </button>
                         </form>
                     ) : (
-                        <Link to="/forgot-password" className="register-button">
+                        <Link href="/forgot-password" className="register-button">
                             Pedir código
                         </Link>
                     )}
@@ -176,7 +191,7 @@ function ResetPassword() {
                     {success && <p className="register-success">{success}</p>}
                     {error && <p className="register-error">{error}</p>}
                     <p className="register-footer">
-                        <Link to="/login">Volver a iniciar sesión</Link>
+                        <Link href="/login">Volver a iniciar sesión</Link>
                     </p>
                 </div>
             </main>

@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { verifyCode, resendCode } from "../api";
 import "./Register.css";
 
@@ -8,9 +11,12 @@ function Verify() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [resending, setResending] = useState(false);
-    const location = useLocation();
-    const email = location.state?.email || sessionStorage.getItem("verifyEmail") || "";
-    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const router = useRouter();
+
+    useEffect(() => {
+        setEmail(sessionStorage.getItem("verifyEmail") || "");
+    }, []);
 
     const handleVerify = async (e) => {
         e.preventDefault();
@@ -18,7 +24,7 @@ function Verify() {
         try {
             await verifyCode(email, code);
             sessionStorage.removeItem("verifyEmail");
-            navigate("/login");
+            router.push("/login");
         } catch (error) {
             console.error(error);
             setError(error.message);
@@ -26,22 +32,21 @@ function Verify() {
     };
 
     const handleResendCode = async () => {
-
-        if(!email || resending) return;
+        if (!email || resending) return;
 
         setError("");
         setSuccess("");
         setResending(true);
 
-        try{
+        try {
             await resendCode(email);
             setSuccess("Te enviamos un nuevo código. Revisa tu email.");
-        }catch(err){
+        } catch (err) {
             setError(err.message);
-        }finally{
+        } finally {
             setResending(false);
         }
-    }
+    };
 
     return (
         <div className="register-page">
@@ -115,7 +120,7 @@ function Verify() {
                             </button>
                         </form>
                     ) : (
-                        <Link to="/register" className="register-button">
+                        <Link href="/register" className="register-button">
                             Ir a registro
                         </Link>
                     )}
@@ -137,7 +142,7 @@ function Verify() {
                     {success && <p className="register-success">{success}</p>}
                     {error && <p className="register-error">{error}</p>}
                     <p className="register-footer">
-                        ¿Ya verificaste? <Link to="/login">Inicia sesión</Link>
+                        ¿Ya verificaste? <Link href="/login">Inicia sesión</Link>
                     </p>
                 </div>
             </main>

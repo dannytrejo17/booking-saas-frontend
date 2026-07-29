@@ -1,5 +1,8 @@
+"use client";
+
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { forgotPassword } from "../api";
 import "./Register.css";
 
@@ -7,7 +10,7 @@ function ForgotPassword() {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,12 +20,11 @@ function ForgotPassword() {
         try {
             const data = await forgotPassword(email.trim());
             sessionStorage.setItem("resetEmail", email.trim());
-            navigate("/reset-password", {
-                state: {
-                    email: email.trim(),
-                    message: data?.message || "Si el email existe, te enviamos un codigo de recuperacion",
-                },
-            });
+            sessionStorage.setItem(
+                "resetMessage",
+                data?.message || "Si el email existe, te enviamos un codigo de recuperacion"
+              );
+              router.push("/reset-password");
         } catch (err) {
             setError(err.message);
         } finally {
@@ -94,7 +96,7 @@ function ForgotPassword() {
 
                     {error && <p className="register-error">{error}</p>}
                     <p className="register-footer">
-                        <Link to="/login">Volver a iniciar sesión</Link>
+                        <Link href="/login">Volver a iniciar sesión</Link>
                     </p>
                 </div>
             </main>

@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import Header from "../components/Header";
 import "./Home.css";
 
@@ -169,7 +171,7 @@ function Home() {
                         </div>
 
                         <div className="home-hero-actions">
-                            <Link to="/register" className="home-btn-primary">
+                            <Link href="/register" className="home-btn-primary">
                                 Comenzar gratis
                                 <span aria-hidden="true">→</span>
                             </Link>
@@ -316,7 +318,7 @@ function Home() {
                         </div>
 
                         <div className="home-businesses-actions">
-                            <Link to="/register" className="home-btn-primary">
+                            <Link href="/register" className="home-btn-primary">
                                 Crear mi cuenta
                                 <span aria-hidden="true">→</span>
                             </Link>
@@ -352,7 +354,7 @@ function Home() {
                     </div>
                     <div className="home-stats-cta">
                         <p>Estamos en fase de lanzamiento. Empieza gratis y configura tu negocio real.</p>
-                        <Link to="/register" className="home-btn-primary">
+                        <Link href="/register" className="home-btn-primary">
                             Comenzar ahora
                             <span aria-hidden="true">→</span>
                         </Link>
