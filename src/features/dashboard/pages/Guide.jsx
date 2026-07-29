@@ -1,4 +1,7 @@
-import { Link, useOutletContext } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { useDashboard } from "../DashboardContext";
 
 const steps = [
     {
@@ -153,7 +156,7 @@ const steps = [
 ];
 
 function Guide() {
-    const { user } = useOutletContext();
+    const { user } = useDashboard();
     const slug = user?.business?.slug;
     const publicUrl = slug ? `/reservar/${slug}` : null;
 
@@ -201,7 +204,7 @@ function Guide() {
                             </div>
 
                             <div className="dash-guide-actions">
-                                <Link to={step.to} className="dash-guide-link">
+                                <Link href={step.to} className="dash-guide-link">
                                     {step.action}
                                 </Link>
                                 {step.openPublic && publicUrl && (

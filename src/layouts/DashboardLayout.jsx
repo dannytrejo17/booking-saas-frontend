@@ -1,14 +1,17 @@
+"use client";
+
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { getMe, logout } from "../features/auth/api";
-import { useNavigate, Outlet } from "react-router-dom";
 import Onboarding from "../features/business/components/Onboarding";
 import Sidebar from "../features/dashboard/components/Sidebar";
+import { DashboardProvider } from "../features/dashboard/DashboardContext";
 import "../features/dashboard/Dashboard.css";
 
-function DashboardLayout() {
+function DashboardLayout({ children }) {
     const [user, setUser] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const refreshUser = async () => {
         try {
@@ -16,7 +19,7 @@ function DashboardLayout() {
             setUser(data);
         } catch {
             logout();
-            navigate("/login");
+            router.replace("/login");
         }
     };
 
@@ -27,12 +30,12 @@ function DashboardLayout() {
                 setUser(data);
             } catch {
                 logout();
-                navigate("/login");
+                router.replace("/login");
             }
         };
 
         fetchUser();
-    }, [navigate]);
+    }, [router]);
 
     if (!user) {
         return <div className="dash-loading">Cargando...</div>;
@@ -44,7 +47,7 @@ function DashboardLayout() {
 
     const handleLogout = () => {
         logout();
-        navigate("/login");
+        router.replace("/login");
     };
 
     return (
@@ -76,7 +79,9 @@ function DashboardLayout() {
                 </header>
 
                 <section className="dashboard-content">
-                    <Outlet context={{ user, refreshUser }} />
+                    <DashboardProvider value={{ user, refreshUser }}>
+                        {children}
+                    </DashboardProvider>
                 </section>
             </main>
         </div>

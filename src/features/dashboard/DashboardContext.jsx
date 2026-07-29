@@ -1,0 +1,21 @@
+"use client";
+
+import { createContext, useContext } from "react";
+
+const DashboardContext = createContext(null);
+
+export function DashboardProvider({ value, children }) {
+  return (
+    <DashboardContext.Provider value={value}>
+      {children}
+    </DashboardContext.Provider>
+  );
+}
+
+export function useDashboard() {
+  const ctx = useContext(DashboardContext);
+  if (!ctx) {
+    throw new Error("useDashboard debe usarse dentro de DashboardProvider");
+  }
+  return ctx;
+}

@@ -1,8 +1,28 @@
-import { NavLink } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const links = [
+    { href: "/dashboard", label: "Resumen", icon: "▦", end: true },
+    { href: "/dashboard/servicios", label: "Servicios", icon: "📋" },
+    { href: "/dashboard/empleados", label: "Empleados", icon: "👤" },
+    { href: "/dashboard/reservas", label: "Reservas", icon: "📅" },
+    { href: "/dashboard/horarios", label: "Horarios", icon: "🕐" },
+    { href: "/dashboard/reseñas", label: "Reseñas", icon: "💬" },
+    { href: "/dashboard/guia", label: "Cómo usar", icon: "?" },
+];
 
 function Sidebar({ user, onLogout, open, onClose }) {
+    const pathname = usePathname();
+
     const handleNav = () => {
         onClose?.();
+    };
+
+    const isActive = (href, end) => {
+        if (end) return pathname === href;
+        return pathname === href || pathname.startsWith(`${href}/`);
     };
 
     return (
@@ -32,63 +52,17 @@ function Sidebar({ user, onLogout, open, onClose }) {
                 </div>
 
                 <nav className="sidebar-nav">
-                    <NavLink
-                        to="/dashboard"
-                        end
-                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
-                        onClick={handleNav}
-                    >
-                        <span className="sidebar-btn-icon">▦</span>
-                        Resumen
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard/servicios"
-                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
-                        onClick={handleNav}
-                    >
-                        <span className="sidebar-btn-icon">📋</span>
-                        Servicios
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard/empleados"
-                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
-                        onClick={handleNav}
-                    >
-                        <span className="sidebar-btn-icon">👤</span>
-                        Empleados
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard/reservas"
-                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
-                        onClick={handleNav}
-                    >
-                        <span className="sidebar-btn-icon">📅</span>
-                        Reservas
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard/horarios"
-                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
-                        onClick={handleNav}
-                    >
-                        <span className="sidebar-btn-icon">🕐</span>
-                        Horarios
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard/reseñas"
-                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
-                        onClick={handleNav}
-                    >
-                        <span className="sidebar-btn-icon">💬</span>
-                        Reseñas
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard/guia"
-                        className={({ isActive }) => `sidebar-btn${isActive ? " active" : ""}`}
-                        onClick={handleNav}
-                    >
-                        <span className="sidebar-btn-icon">?</span>
-                        Cómo usar
-                    </NavLink>
+                    {links.map((link) => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={`sidebar-btn${isActive(link.href, link.end) ? " active" : ""}`}
+                            onClick={handleNav}
+                        >
+                            <span className="sidebar-btn-icon">{link.icon}</span>
+                            {link.label}
+                        </Link>
+                    ))}
                 </nav>
 
                 <div className="sidebar-footer">
