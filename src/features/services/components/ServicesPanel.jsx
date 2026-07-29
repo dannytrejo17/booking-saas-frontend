@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useDashboard } from "../../dashboard/DashboardContext";
 import {
     getServices,
     createService,
@@ -9,7 +11,7 @@ import {
 import { formatPrice, getCurrencySymbol } from "../../../shared/currency";
 
 function ServicesPanel() {
-    const { user } = useOutletContext();
+    const { user } = useDashboard();
     const currency = user?.business?.currency || "EUR";
     const currencySymbol = getCurrencySymbol(currency);
 
