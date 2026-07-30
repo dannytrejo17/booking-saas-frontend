@@ -1,4 +1,7 @@
-import { Link, useParams } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getPublicReviews } from "../api";
 import "../../public-booking/pages/PublicBooking.css";
@@ -46,7 +49,7 @@ function PublicBusinessReviews() {
             <main className="public-main">
                 <section className="public-section public-reviews-section">
                     <div className="public-section-header">
-                        <Link to={`/reservar/${slug}`} className="public-reviews-back">
+                        <Link href={`/reservar/${slug}`} className="public-reviews-back">
                             ← Volver a reservar
                         </Link>
                         <h2>Reseñas</h2>

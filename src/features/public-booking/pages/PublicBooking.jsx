@@ -1,4 +1,7 @@
-import { Link, useParams } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
     getPublicBusiness,
@@ -545,7 +548,7 @@ function PublicBooking() {
                     )}
 
                     {reviewTotalPages > 1 && (
-                        <Link to={`/reservar/${slug}/reseñas`} className="public-reviews-more">
+                        <Link href={`/reservar/${slug}/reseñas`} className="public-reviews-more">
                             Ver más reseñas
                         </Link>
                     )}
