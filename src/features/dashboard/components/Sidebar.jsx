@@ -9,7 +9,7 @@ const links = [
     { href: "/dashboard/empleados", label: "Empleados", icon: "👤" },
     { href: "/dashboard/reservas", label: "Reservas", icon: "📅" },
     { href: "/dashboard/horarios", label: "Horarios", icon: "🕐" },
-    { href: "/dashboard/reseñas", label: "Reseñas", icon: "💬" },
+    { href: "/dashboard/reviews", label: "Reseñas", icon: "💬" },
     { href: "/dashboard/guia", label: "Cómo usar", icon: "?" },
 ];
 

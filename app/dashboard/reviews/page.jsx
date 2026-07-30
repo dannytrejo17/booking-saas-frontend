@@ -2,6 +2,6 @@
 
 import ReviewsPanel from "../../../src/features/reviews/components/ReviewsPanel";
 
-export default function ResenasPage() {
+export default function ReviewsPage() {
   return <ReviewsPanel />;
 }

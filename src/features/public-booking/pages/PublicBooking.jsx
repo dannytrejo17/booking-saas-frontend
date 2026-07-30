@@ -548,7 +548,7 @@ function PublicBooking() {
                     )}
 
                     {reviewTotalPages > 1 && (
-                        <Link href={`/reservar/${slug}/reseñas`} className="public-reviews-more">
+                        <Link href={`/reservar/${slug}/reviews`} className="public-reviews-more">
                             Ver más reseñas
                         </Link>
                     )}

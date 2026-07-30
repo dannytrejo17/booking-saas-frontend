@@ -1,16 +1,18 @@
-import { useSearchParams } from "react-router-dom";
+"use client";
+
+import { useSearchParams } from "next/navigation";
 import { createReview } from "../api";
 import { useState } from "react";
 import "./PublicReview.css";
 
 function PublicReview() {
-    const[customerName, setCustomerName] = useState("");
-    const[rating, setRating] = useState(0);
-    const[comment, setComment] = useState("");
-    const[searchParams] = useSearchParams();
+    const [customerName, setCustomerName] = useState("");
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState("");
+    const searchParams = useSearchParams();
     const token = searchParams.get("token");
-    const[success, setSuccess] = useState(null);
-    const[error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
+    const [error, setError] = useState(null);
 
     if (!token) {
         return (
@@ -28,7 +30,7 @@ function PublicReview() {
         e.preventDefault();
         setError(null);
         setSuccess(null);
-        try{
+        try {
             await createReview(token, customerName, Number(rating), comment);
             setCustomerName("");
             setRating(0);
@@ -37,7 +39,7 @@ function PublicReview() {
         } catch (err) {
             setError(err.message);
         }
-    }
+    };
 
     return (
         <div className="public-review-page">
@@ -95,8 +97,7 @@ function PublicReview() {
                 </div>
             </main>
         </div>
-    )
-
+    );
 }
 
 export default PublicReview;

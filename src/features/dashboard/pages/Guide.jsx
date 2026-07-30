@@ -138,7 +138,7 @@ const steps = [
         summary: "Prueba social en tu página de reservas.",
         affects: [
             "Las reseñas publicadas aparecen en /reservar/tu-slug",
-            "Puedes listarlas todas en /reservar/tu-slug/reseñas",
+            "Puedes listarlas todas en /reservar/tu-slug/reviews",
             "La invitación se envía por WhatsApp con un enlace temporal",
         ],
         how: [
@@ -150,7 +150,7 @@ const steps = [
             "Sin invitaciones, la sección de reseñas puede quedar vacía",
             "Una reseña ya enviada no se puede repetir con el mismo enlace",
         ],
-        to: "/dashboard/reseñas",
+        to: "/dashboard/reviews",
         action: "Ir a Reseñas",
     },
 ];

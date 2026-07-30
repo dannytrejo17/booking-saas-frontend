@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import PublicBusinessReviews from "../../../../src/features/reviews/pages/PublicBusinessReviews";
 
