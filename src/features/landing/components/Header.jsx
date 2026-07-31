@@ -8,9 +8,13 @@ import "./Header.css";
 
 function Header({ variant }) {
     const router = useRouter();
-    const token = getToken();
+    const [token, setToken] = useState(null);
     const isLanding = variant === "landing";
     const [menuOpen, setMenuOpen] = useState(false);
+
+    useEffect(() => {
+        setToken(getToken());
+    }, []);
 
     const handleLogout = () => {
         logout();
