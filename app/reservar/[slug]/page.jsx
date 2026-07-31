@@ -84,7 +84,7 @@ export default async function ReservarPage({ params }) {
                         Reserva tu cita en pocos pasos. Elige servicio, profesional y horario.
                     </p>
 
-                    {(business.email || business.phone || business.address) && (
+                    {(business.email || business.phone || business.address || business.instagramUrl || business.tiktokUrl) && (
                         <div className="public-contact">
                             {business.email && (
                                 <a href={`mailto:${business.email}`} className="public-contact-chip">
@@ -112,6 +112,16 @@ export default async function ReservarPage({ params }) {
                                     </svg>
                                     {business.address}
                                 </span>
+                            )}
+                            {business.instagramUrl && (
+                                <a href={business.instagramUrl} target="_blank" rel="noopener noreferrer" className="public-contact-chip">
+                                    Instagram
+                                </a>
+                            )}
+                            {business.tiktokUrl && (
+                                <a href={business.tiktokUrl} target="_blank" rel="noopener noreferrer" className="public-contact-chip">
+                                    TikTok
+                                </a>
                             )}
                         </div>
                     )}

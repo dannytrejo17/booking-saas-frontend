@@ -16,6 +16,8 @@ function Summary({ user, onUserUpdate }) {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
+    const [instagramUrl, setInstagramUrl] = useState("");
+    const [tiktokUrl, setTiktokUrl] = useState("");
     const [currency, setCurrency] = useState("EUR");
 
     useEffect(() => {
@@ -26,6 +28,8 @@ function Summary({ user, onUserUpdate }) {
         setEmail(business.email || "");
         setPhone(business.phone || "");
         setAddress(business.address || "");
+        setInstagramUrl(business.instagramUrl || "");
+        setTiktokUrl(business.tiktokUrl || "");
         setCurrency(business.currency || "EUR");
     }, [user]);
 
@@ -79,6 +83,8 @@ function Summary({ user, onUserUpdate }) {
                 phone: phone.trim(),
                 address: address.trim(),
                 logo: user.business.logo || "",
+                instagramUrl: instagramUrl.trim() || null,
+                tiktokUrl: tiktokUrl.trim() || null,
                 currency,
             });
             await onUserUpdate();
@@ -288,6 +294,28 @@ function Summary({ user, onUserUpdate }) {
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             placeholder="Opcional"
+                        />
+                    </div>
+
+                    <div className="dash-business-field">
+                        <label htmlFor="edit-business-instagram">Instagram</label>
+                        <input
+                            id="edit-business-instagram"
+                            type="url"
+                            value={instagramUrl}
+                            onChange={(e) => setInstagramUrl(e.target.value)}
+                            placeholder="https://instagram.com/tu-negocio"
+                        />
+                    </div>
+
+                    <div className="dash-business-field">
+                        <label htmlFor="edit-business-tiktok">TikTok</label>
+                        <input
+                            id="edit-business-tiktok"
+                            type="url"
+                            value={tiktokUrl}
+                            onChange={(e) => setTiktokUrl(e.target.value)}
+                            placeholder="https://tiktok.com/@tu-negocio"
                         />
                     </div>
 
