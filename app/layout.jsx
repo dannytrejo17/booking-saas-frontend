@@ -1,6 +1,9 @@
 export const metadata = {
   title: "Turnexa",
   description: "Software de reservas para tu negocio",
+  icons: {
+    icon: "/brand/turnexa-logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {
