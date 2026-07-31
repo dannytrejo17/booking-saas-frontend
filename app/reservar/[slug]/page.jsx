@@ -11,9 +11,13 @@ export async function generateMetadata({ params }) {
         const { slug } = await params;
         const business = await getPublicBusiness(slug);
         const image = business.coverImage || business.logo || null;
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://turnexa.vercel.app";
         return {
             title: `Reservar en ${business.name}`,
             description: `Reserva tu cita en ${business.name}. Elige servicio, profesional y horario online.`,
+            alternates: {
+                canonical: `${baseUrl}/reservar/${slug}`,
+            },
             openGraph: {
                 title: `Reservar en ${business.name}`,
                 description: `Reserva tu cita en ${business.name}. Elige servicio, profesional y horario online.`,

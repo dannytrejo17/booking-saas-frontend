@@ -7,9 +7,13 @@ export async function generateMetadata({ params }) {
     try {
         const { slug } = await params;
         const business = await getPublicBusiness(slug);
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://turnexa.vercel.app";
         return {
             title: `Reseñas de ${business.name}`,
             description: `Lee las reseñas de clientes de ${business.name} y reserva tu cita online.`,
+            alternates: {
+                canonical: `${baseUrl}/reservar/${slug}/reviews`,
+            },
             openGraph: {
                 title: `Reseñas de ${business.name}`,
                 description: `Lee las reseñas de clientes de ${business.name} y reserva tu cita online.`,
