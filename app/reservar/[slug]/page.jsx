@@ -152,7 +152,7 @@ export default async function ReservarPage({ params }) {
             </header>
 
             {(business.logo || showRating) && (
-                <div className="public-logo-row">
+                <div className={`public-logo-row${business.logo ? "" : " public-logo-row--no-logo"}`}>
                     {business.logo && (
                         <div className="public-logo-wrap">
                             <img src={business.logo} alt={business.name} className="public-logo" />
