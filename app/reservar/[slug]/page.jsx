@@ -57,6 +57,14 @@ export default async function ReservarPage({ params }) {
 
     const reviews = reviewsData.content || [];
     const reviewTotalPages = reviewsData.totalPages || 0;
+    const reviewCount = Number(reviewsData.totalElements) || 0;
+    const averageRaw = Number(reviewsData.averageRating);
+    const averageRating =
+        Number.isFinite(averageRaw) && averageRaw > 0 ? averageRaw.toFixed(1) : null;
+    const filledStars = averageRating
+        ? Math.min(5, Math.max(0, Math.round(Number(averageRating))))
+        : 0;
+    const showRating = reviewCount > 0 && averageRating;
 
     const jsonLd = {
         "@context": "https://schema.org",
@@ -143,11 +151,31 @@ export default async function ReservarPage({ params }) {
                 </div>
             </header>
 
-            {business.logo && (
+            {(business.logo || showRating) && (
                 <div className="public-logo-row">
-                    <div className="public-logo-wrap">
-                        <img src={business.logo} alt={business.name} className="public-logo" />
-                    </div>
+                    {business.logo && (
+                        <div className="public-logo-wrap">
+                            <img src={business.logo} alt={business.name} className="public-logo" />
+                        </div>
+                    )}
+                    {showRating && (
+                        <p
+                            className="public-logo-rating"
+                            aria-label={`${averageRating} de 5, ${reviewCount} reseñas`}
+                        >
+                            <span className="public-logo-rating-stars" aria-hidden="true">
+                                {"★".repeat(filledStars)}
+                                <span className="public-logo-rating-empty">
+                                    {"★".repeat(5 - filledStars)}
+                                </span>
+                            </span>
+                            <span className="public-logo-rating-text">
+                                <strong>{averageRating}</strong>
+                                <span className="public-logo-rating-dot" aria-hidden="true">·</span>
+                                {reviewCount} {reviewCount === 1 ? "reseña" : "reseñas"}
+                            </span>
+                        </p>
+                    )}
                 </div>
             )}
 

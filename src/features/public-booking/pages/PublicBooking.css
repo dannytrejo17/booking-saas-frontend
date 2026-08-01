@@ -126,6 +126,10 @@
 .public-logo-row {
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
     max-width: 960px;
     margin: 0 auto;
     padding: 0 2rem;
@@ -148,6 +152,50 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.public-logo-rating {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem 0.75rem;
+    margin: 0;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid #e8edf5;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.public-logo-rating-stars {
+    color: #d97706;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    line-height: 1;
+}
+
+.public-logo-rating-empty {
+    color: #f0e2cb;
+}
+
+.public-logo-rating-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.public-logo-rating-text strong {
+    color: #0f172a;
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.public-logo-rating-dot {
+    color: #cbd5e1;
+    font-weight: 700;
 }
 
 .public-badge {
@@ -399,6 +447,30 @@
     font-weight: 600;
     color: #0f172a;
     text-align: center;
+}
+
+/* Booking panel (services + team + form) */
+.public-booking-panel {
+    margin-bottom: 3.5rem;
+    padding: 2rem 2.25rem 2.25rem;
+    background: #fff;
+    border: 1px solid #e8edf5;
+    border-radius: 24px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.07);
+}
+
+.public-booking-panel .public-section:last-child {
+    margin-bottom: 0;
+}
+
+.public-booking-panel .public-booking-section {
+    margin-top: 0.5rem;
+    padding: 1.75rem 0 0;
+    background: transparent;
+    border: none;
+    border-top: 1px solid #eef2f7;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 /* Booking section */
@@ -804,6 +876,7 @@
 
     .public-logo-row {
         padding: 0 1.25rem;
+        gap: 0.7rem;
     }
 
     .public-logo-wrap {
@@ -811,6 +884,10 @@
         height: 128px;
         margin-top: -64px;
         border-width: 5px;
+    }
+
+    .public-logo-rating {
+        padding: 0.5rem 0.8rem;
     }
 
     .public-main {
@@ -824,6 +901,15 @@
     .public-booking-section {
         padding: 1.5rem;
         border-radius: 16px;
+    }
+
+    .public-booking-panel {
+        padding: 1.35rem 1.25rem 1.5rem;
+        border-radius: 18px;
+    }
+
+    .public-booking-panel .public-booking-section {
+        padding: 1.35rem 0 0;
     }
 
     .public-contact {

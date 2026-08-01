@@ -100,7 +100,7 @@ function BookingWidget({ slug, services, employees, currency }) {
     const anyProfessional = employeeId === "any";
 
     return (
-        <>
+        <div className="public-booking-panel">
             {services.length > 0 && (
                 <section className="public-section">
                     <div className="public-section-header">
@@ -321,7 +321,7 @@ function BookingWidget({ slug, services, employees, currency }) {
                     </div>
                 )}
             </section>
-        </>
+        </div>
     );
 }
 
