@@ -16,13 +16,11 @@ export async function login(email, password) {
     }
 
     const data = await response.json();
-    const token = data.token;
-
-    if (!token) {
+    if (!data.token) {
         throw new Error("El backend respondió OK pero no devolvió token");
     }
 
-    return token;
+    return data;
 }
 
 
@@ -53,6 +51,7 @@ export async function verifyCode(email, code) {
     if (!response.ok) {
         throw new Error(await getErrorMessage(response, "No se pudo verificar el código"));
     }
+    return response.json();
 }
 
 export async function resendCode(email){
@@ -120,8 +119,12 @@ export async function getMe() {
 export function getToken() {
     if (typeof window === "undefined") return null;
     return localStorage.getItem("token");
-  }
-  
+}
+
+export function setToken(token) {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("token", token);
+}
 
 export function logout() {
     localStorage.removeItem("token");

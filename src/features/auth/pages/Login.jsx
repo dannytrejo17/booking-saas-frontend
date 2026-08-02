@@ -26,9 +26,13 @@ function Login(){
         setError("");
 
         try{
-            const token = await login(email, password);
-            localStorage.setItem("token", token);
-            router.push("/dashboard");
+            const session = await login(email, password);
+            localStorage.setItem("token", session.token);
+            if (session.hasBusiness) {
+                router.push("/dashboard");
+            } else {
+                router.push("/crear-negocio");
+            }
         } catch (error) {
             console.error(error);
             setError(error.message);
@@ -76,7 +80,9 @@ function Login(){
             <main className="login-panel">
                 <div className="login-card">
                     <h1>Iniciar sesión</h1>
-                    <p className="login-subtitle">Accede a tu cuenta para gestionar tu negocio</p>
+                    <p className="login-subtitle">
+                        Accede al panel de tu negocio. Si aún no lo creaste, te llevamos a hacerlo.
+                    </p>
                     <form className="login-form" onSubmit={handlelogin}>
                         <div className="login-field">
                             <label htmlFor="email">Email</label>

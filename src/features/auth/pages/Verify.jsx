@@ -22,9 +22,26 @@ function Verify() {
         e.preventDefault();
         setError("");
         try {
-            await verifyCode(email, code);
+            const session = await verifyCode(email, code);
             sessionStorage.removeItem("verifyEmail");
-            router.push("/login");
+            const next = sessionStorage.getItem("customerAuthNext") || "";
+            sessionStorage.removeItem("customerAuthNext");
+            if (next) {
+                sessionStorage.setItem(
+                    "customerLoginMessage",
+                    "Cuenta verificada. Ya puedes iniciar sesión."
+                );
+                router.push(`/cliente/login?next=${encodeURIComponent(next)}`);
+                return;
+            }
+            if (session?.token) {
+                localStorage.setItem("token", session.token);
+            }
+            if (session?.hasBusiness) {
+                router.push("/dashboard");
+            } else {
+                router.push("/crear-negocio");
+            }
         } catch (error) {
             console.error(error);
             setError(error.message);
@@ -67,7 +84,7 @@ function Verify() {
                     <h2>Un paso más para activar tu cuenta</h2>
                     <p>
                         Introduce el código de verificación para confirmar tu email
-                        y empezar a gestionar tu negocio.
+                        y empezar a usar Turnexa.
                     </p>
                     <div className="register-brand-features">
                         <div className="register-brand-feature">

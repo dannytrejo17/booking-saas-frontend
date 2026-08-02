@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getMe, logout } from "../features/auth/api";
-import Onboarding from "../features/business/components/Onboarding";
+import { getMe, getToken, logout } from "../features/auth/api";
 import Sidebar from "../features/dashboard/components/Sidebar";
 import { DashboardProvider } from "../features/dashboard/DashboardContext";
 import "../features/dashboard/Dashboard.css";
@@ -16,8 +15,16 @@ function DashboardLayout({ children }) {
     const refreshUser = async () => {
         try {
             const data = await getMe();
+            if (!data.business) {
+                router.replace("/crear-negocio");
+                return;
+            }
             setUser(data);
         } catch {
+            if (getToken()) {
+                router.replace("/crear-negocio");
+                return;
+            }
             logout();
             router.replace("/login");
         }
@@ -27,8 +34,16 @@ function DashboardLayout({ children }) {
         const fetchUser = async () => {
             try {
                 const data = await getMe();
+                if (!data.business) {
+                    router.replace("/crear-negocio");
+                    return;
+                }
                 setUser(data);
             } catch {
+                if (getToken()) {
+                    router.replace("/crear-negocio");
+                    return;
+                }
                 logout();
                 router.replace("/login");
             }
@@ -39,10 +54,6 @@ function DashboardLayout({ children }) {
 
     if (!user) {
         return <div className="dash-loading">Cargando...</div>;
-    }
-
-    if (!user.business) {
-        return <Onboarding onBusinessCreated={refreshUser} />;
     }
 
     const handleLogout = () => {
