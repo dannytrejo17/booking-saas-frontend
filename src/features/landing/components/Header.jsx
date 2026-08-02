@@ -4,16 +4,19 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getToken, logout } from "../../auth/api";
+import { getCustomerToken } from "../../customer-auth/api";
 import "./Header.css";
 
 function Header({ variant }) {
     const router = useRouter();
     const [token, setToken] = useState(null);
+    const [customerToken, setCustomerToken] = useState(null);
     const isLanding = variant === "landing";
     const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         setToken(getToken());
+        setCustomerToken(getCustomerToken());
     }, []);
 
     const handleLogout = () => {
@@ -72,8 +75,11 @@ function Header({ variant }) {
                     </>
                 ) : (
                     <>
+                        <Link href={customerToken ? "/cliente" : "/cliente/login"} className="header-link">
+                            Acceso clientes
+                        </Link>
                         <button className="header-link" onClick={() => router.push("/login")}>
-                            Iniciar sesión
+                            Acceso negocio
                         </button>
                         <Link href="/register" className="header-btn">
                             Prueba gratis
@@ -116,6 +122,13 @@ function Header({ variant }) {
                         </>
                     ) : (
                         <>
+                            <Link
+                                href={customerToken ? "/cliente" : "/cliente/login"}
+                                className="header-btn header-btn-outline"
+                                onClick={closeMenu}
+                            >
+                                Acceso clientes
+                            </Link>
                             <button
                                 className="header-btn header-btn-outline"
                                 onClick={() => {
@@ -123,7 +136,7 @@ function Header({ variant }) {
                                     router.push("/login");
                                 }}
                             >
-                                Iniciar sesión
+                                Acceso negocio
                             </button>
                             <Link href="/register" className="header-btn" onClick={closeMenu}>
                                 Prueba gratis

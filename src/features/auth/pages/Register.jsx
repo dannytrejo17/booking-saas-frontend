@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { register } from "../api";
+import { getSafeCustomerNextPath } from "../../customer-auth/api";
 import "./Register.css";
 
 function Register() {
@@ -12,6 +13,14 @@ function Register() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const next = getSafeCustomerNextPath(searchParams.get("next") || "", "");
+        if (next) {
+            sessionStorage.setItem("customerAuthNext", next);
+        }
+    }, [searchParams]);
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -43,23 +52,22 @@ function Register() {
                             Turn<span>exa</span>
                         </span>
                     </div>
-                    <h2>Empieza a gestionar tu negocio hoy</h2>
+                    <h2>Crea tu cuenta en Turnexa</h2>
                     <p>
-                        Crea tu cuenta gratis y centraliza reservas, clientes y horarios.
-                        Pensado para barberías, estética, spas y centros de bienestar.
+                        Una sola cuenta para gestionar tu negocio o iniciar sesión como cliente.
                     </p>
                     <div className="register-brand-features">
                         <div className="register-brand-feature">
                             <span>✓</span>
-                            Sin tarjeta de crédito
+                            Una sola cuenta
+                        </div>
+                        <div className="register-brand-feature">
+                            <span>✓</span>
+                            Panel de negocio o modo cliente
                         </div>
                         <div className="register-brand-feature">
                             <span>✓</span>
                             Listo en minutos
-                        </div>
-                        <div className="register-brand-feature">
-                            <span>✓</span>
-                            Cancela cuando quieras
                         </div>
                     </div>
                 </div>
@@ -68,7 +76,9 @@ function Register() {
             <main className="register-panel">
                 <div className="register-card">
                     <h1>Crear cuenta</h1>
-                    <p className="register-subtitle">Regístrate para empezar a gestionar tu negocio</p>
+                    <p className="register-subtitle">
+                        Crea tu cuenta. Luego podrás gestionar un negocio o iniciar sesión como cliente.
+                    </p>
                     <form className="register-form" onSubmit={handleRegister}>
                         <div className="register-field">
                             <label htmlFor="name">Nombre</label>
