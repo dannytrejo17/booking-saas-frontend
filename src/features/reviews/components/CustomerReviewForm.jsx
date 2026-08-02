@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createCustomerReview } from "../api";
-import { getCustomerToken, customerLogout } from "../../customer-auth/api";
+import { getCustomerToken } from "../../customer-auth/api";
 import "../pages/PublicBusinessReviews.css";
 
 function CustomerReviewForm({ slug, returnPath, onCreated }) {
@@ -28,13 +28,6 @@ function CustomerReviewForm({ slug, returnPath, onCreated }) {
             document.getElementById("escribir-resena")?.scrollIntoView({ behavior: "smooth" });
         }
     }, []);
-
-    const handleLogout = () => {
-        customerLogout();
-        setIsLoggedIn(false);
-        setFormError(null);
-        setFormSuccess(null);
-    };
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
@@ -85,16 +78,7 @@ function CustomerReviewForm({ slug, returnPath, onCreated }) {
         <div id="escribir-resena" className="customer-review-box">
             {isLoggedIn ? (
                 <>
-                    <div className="customer-review-box-top">
-                        <h3>Escribe tu reseña</h3>
-                        <button
-                            type="button"
-                            className="customer-review-logout"
-                            onClick={handleLogout}
-                        >
-                            Cerrar sesión
-                        </button>
-                    </div>
+                    <h3>Escribe tu reseña</h3>
                     <form className="customer-review-form" onSubmit={handleSubmitReview}>
                         <div className="customer-review-field">
                             <span className="customer-review-label">Calificación</span>
