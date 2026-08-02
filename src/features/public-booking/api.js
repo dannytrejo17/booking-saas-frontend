@@ -13,6 +13,16 @@ export async function getPublicBusiness(slug) {
     return response.json();
 }
 
+export async function getAllPublicBusinesses() {
+    const response = await fetch(`${API_URL}/api/public`);
+
+    if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "No se pudieron cargar los negocios"));
+    }
+
+    return response.json();
+}
+
 
 export async function getPublicServices(slug) {
     const response = await fetch(`${API_URL}/api/public/${slug}/services`);

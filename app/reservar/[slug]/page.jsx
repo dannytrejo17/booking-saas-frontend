@@ -4,6 +4,7 @@ import { getPublicBusiness, getPublicServices, getPublicEmployees } from "../../
 import { getPublicReviews } from "../../../src/features/reviews/api";
 import BookingWidget from "./components/BookingWidget";
 import ScrollToBookingButton from "./components/ScrollToBookingButton";
+import WriteReviewSection from "./components/WriteReviewSection";
 import "../../../src/features/public-booking/pages/PublicBooking.css";
 
 export async function generateMetadata({ params }) {
@@ -52,7 +53,12 @@ export default async function ReservarPage({ params }) {
     const [services, employees, reviewsData] = await Promise.all([
         getPublicServices(slug),
         getPublicEmployees(slug),
-        getPublicReviews(slug, 0, 10),
+        getPublicReviews(slug, 0, 10).catch(() => ({
+            content: [],
+            totalPages: 0,
+            totalElements: 0,
+            averageRating: null,
+        })),
     ]);
 
     const reviews = reviewsData.content || [];
@@ -192,6 +198,8 @@ export default async function ReservarPage({ params }) {
                         <h2>Reseñas</h2>
                         <p>Lo que dicen nuestros clientes</p>
                     </div>
+
+                    <WriteReviewSection slug={slug} />
 
                     {reviews.length === 0 && (
                         <div className="public-reviews-status public-reviews-status--empty">

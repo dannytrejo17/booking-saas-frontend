@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { getPublicReviews } from "../../../../src/features/reviews/api";
+import CustomerReviewForm from "../../../../src/features/reviews/components/CustomerReviewForm";
 import "../../../../src/features/public-booking/pages/PublicBooking.css";
 import "../../../../src/features/reviews/pages/PublicBusinessReviews.css";
 
@@ -21,6 +22,13 @@ function ReviewsClient({ slug, businessName, initialReviews, totalPages: initial
     const [totalPages, setTotalPages] = useState(initialTotalPages);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const refreshFirstPage = async () => {
+        const data = await getPublicReviews(slug, 0, 10);
+        setReviews(data.content || []);
+        setTotalPages(data.totalPages || 0);
+        setPage(0);
+    };
 
     const goToPage = async (newPage) => {
         setLoading(true);
@@ -48,6 +56,12 @@ function ReviewsClient({ slug, businessName, initialReviews, totalPages: initial
                         <h2>Reseñas de {businessName}</h2>
                         <p>Opiniones de clientes</p>
                     </div>
+
+                    <CustomerReviewForm
+                        slug={slug}
+                        returnPath={`/reservar/${slug}`}
+                        onCreated={refreshFirstPage}
+                    />
 
                     {loading && (
                         <div className="public-reviews-status">
