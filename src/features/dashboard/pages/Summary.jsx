@@ -59,7 +59,13 @@ function Summary({ user, onUserUpdate }) {
             await uploadBusinessImage(file, type);
             await onUserUpdate();
             setError("");
-            setSuccess(type === "logo" ? "Logo actualizado" : "Portada actualizada");
+            setSuccess(
+                type === "logo"
+                    ? "Logo actualizado"
+                    : type === "cover"
+                    ? "Portada actualizada"
+                    : "Imagen de galería subida"
+            );
             e.target.value = "";
         } catch (err) {
             setSuccess("");
@@ -105,6 +111,10 @@ function Summary({ user, onUserUpdate }) {
     })();
 
     const monthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+
+    const galleryImages = user?.business?.gallery ?? [];
+    const maxGalleryImages = 3;
+    const canUploadGallery = galleryImages.length < maxGalleryImages;
 
     const todayBookingsCount = bookings.filter((booking) => {
         if (!booking.startAt) return false;
@@ -384,6 +394,40 @@ function Summary({ user, onUserUpdate }) {
                                 onChange={(e) => handleUploadBusinessImage(e, "cover")}
                             />
                         </label>
+                    </div>
+                </div>
+
+                <div className="dash-gallery-section">
+                    <div className="dash-gallery-header">
+                        <div>
+                            <span className="dash-image-card-label">Galería</span>
+                            <p className="dash-gallery-hint">
+                                Hasta {maxGalleryImages} imágenes extra para mostrar más contenido de tu negocio.
+                            </p>
+                        </div>
+                        <label className={`dash-image-btn dash-gallery-upload-btn ${!canUploadGallery ? "dash-image-btn--disabled" : ""}`}>
+                            {canUploadGallery ? "Subir imagen" : "Límite alcanzado"}
+                            <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                disabled={!canUploadGallery}
+                                onChange={(e) => handleUploadBusinessImage(e, "gallery")}
+                            />
+                        </label>
+                    </div>
+
+                    <div className="dash-gallery-grid">
+                        {galleryImages.length > 0 ? (
+                            galleryImages.map((imageUrl, index) => (
+                                <div key={`${imageUrl}-${index}`} className="dash-gallery-item">
+                                    <img src={imageUrl} alt={`Galería ${index + 1}`} />
+                                </div>
+                            ))
+                        ) : (
+                            <div className="dash-gallery-empty">
+                                <span className="dash-image-placeholder">Aún no has subido imágenes a la galería</span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

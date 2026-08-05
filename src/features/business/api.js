@@ -37,7 +37,7 @@ export async function editBusiness(data) {
 export async function uploadBusinessImage(file, type) {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("type", type);
+    formData.append("type", String(type).toUpperCase());
     const response = await fetch(`${API_URL}/api/business/upload`, {
         method: "POST",
         headers: {

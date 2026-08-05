@@ -152,6 +152,7 @@ function PublicBooking() {
         );
     }
 
+    const galleryImages = business.gallery ?? [];
     const selectedService = services.find((s) => String(s.id) === serviceId);
     const selectedEmployee = employees.find((e) => String(e.id) === employeeId);
     const anyProfessional = employeeId === "any";
@@ -263,6 +264,26 @@ function PublicBooking() {
             )}
 
             <main className={`public-main${business.logo ? " public-main--with-logo" : ""}`}>
+                {galleryImages.length > 0 && (
+                    <section className="public-section public-gallery-section">
+                        <div className="public-section-header">
+                            <h2>Galería</h2>
+                            <p>Imágenes del lugar para que tus clientes vean mejor el ambiente.</p>
+                        </div>
+                        <div className="public-gallery-grid">
+                            {galleryImages.map((imageUrl, index) => (
+                                <div key={`${imageUrl}-${index}`} className="public-gallery-card">
+                                    <img
+                                        src={imageUrl}
+                                        alt={`Galería ${index + 1}`}
+                                        className="public-gallery-img"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
                 {services.length > 0 && (
                     <section className="public-section">
                         <div className="public-section-header">
