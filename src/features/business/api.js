@@ -50,3 +50,19 @@ export async function uploadBusinessImage(file, type) {
     }
     return response.json();
 }
+
+export async function updateBusinessGalleryImage(imageId, file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(`${API_URL}/api/business/gallery/${imageId}`, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
+        body: formData
+    });
+    if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "No se pudo actualizar la imagen"));
+    }
+    return response.json();
+}
