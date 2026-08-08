@@ -1,106 +1,49 @@
-import { useState, useEffect } from "react";
-import { getServices } from "../../services/api";
-import { getEmployees } from "../../employees/api";
-import { getBookings } from "../../bookings/api";
-import { uploadBusinessImage, editBusiness } from "../../business/api";
+import { useEffect } from "react";
+import { useDashboardSummary } from "../hooks/useDashboardSummary";
+import { useBusinessForm } from "../hooks/useBusinessForm";
+import { useBusinessImageUpload } from "../hooks/useBusinessImageUpload";
+import PublicPageLink from "../components/summary/PublicPageLink";
+import BusinessInfoCards from "../components/summary/BusinessInfoCards";
+import SummaryStats from "../components/summary/SummaryStats";
+import BusinessEditForm from "../components/summary/BusinessEditForm";
 
 function Summary({ user, onUserUpdate }) {
-    const [services, setServices] = useState([]);
-    const [employees, setEmployees] = useState([]);
-    const [bookings, setBookings] = useState([]);
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
-    const [saving, setSaving] = useState(false);
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [address, setAddress] = useState("");
-    const [instagramUrl, setInstagramUrl] = useState("");
-    const [tiktokUrl, setTiktokUrl] = useState("");
-    const [currency, setCurrency] = useState("EUR");
+    const {
+        businessForm,
+        setField,
+        syncWithUser,
+        handleSubmit,
+        saving,
+        success,
+        error,
+    } = useBusinessForm(onUserUpdate);
+
 
     useEffect(() => {
-        const business = user?.business;
-        if (!business) return;
+        syncWithUser(user);
+    }, [user, syncWithUser]);
 
-        setName(business.name || "");
-        setEmail(business.email || "");
-        setPhone(business.phone || "");
-        setAddress(business.address || "");
-        setInstagramUrl(business.instagramUrl || "");
-        setTiktokUrl(business.tiktokUrl || "");
-        setCurrency(business.currency || "EUR");
-    }, [user]);
 
-    useEffect(() => {
-        const fetchSummary = async () => {
-            try {
-                const [servicesData, employeesData, bookingsData] = await Promise.all([
-                    getServices(),
-                    getEmployees(),
-                    getBookings(),
-                ]);
-                setServices(servicesData);
-                setEmployees(employeesData);
-                setBookings(bookingsData);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-        fetchSummary();
-    }, []);
+    const {
+        services,
+        employees,
+        bookings,
+        loading,
+        error: summaryError,
+    } = useDashboardSummary();
 
-    const handleUploadBusinessImage = async (e, type) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+    
+    const {
+        galleryItems,
+        canUploadGallery,
+        uploadImage,
+        updateGalleryImage,
+        uploadError,
+        uploadSuccess,
+        maxGalleryImages,
+    } = useBusinessImageUpload(user, onUserUpdate);
 
-        try {
-            await uploadBusinessImage(file, type);
-            await onUserUpdate();
-            setError("");
-            setSuccess(
-                type === "logo"
-                    ? "Logo actualizado"
-                    : type === "cover"
-                    ? "Portada actualizada"
-                    : "Imagen de galería subida"
-            );
-            e.target.value = "";
-        } catch (err) {
-            setSuccess("");
-            setError(err.message);
-        }
-    };
-
-    const handleEditBusiness = async (e) => {
-        e.preventDefault();
-        if (saving) return;
-
-        setError("");
-        setSuccess("");
-        setSaving(true);
-
-        try {
-            await editBusiness({
-                name: name.trim(),
-                slug: user.business.slug,
-                email: email.trim(),
-                phone: phone.trim(),
-                address: address.trim(),
-                logo: user.business.logo || "",
-                instagramUrl: instagramUrl.trim() || null,
-                tiktokUrl: tiktokUrl.trim() || null,
-                currency,
-            });
-            await onUserUpdate();
-            setSuccess("Datos del negocio actualizados");
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setSaving(false);
-        }
-    };
 
     const now = new Date();
     const todayLocal = (() => {
@@ -111,10 +54,6 @@ function Summary({ user, onUserUpdate }) {
     })();
 
     const monthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-
-    const galleryImages = user?.business?.gallery ?? [];
-    const maxGalleryImages = 3;
-    const canUploadGallery = galleryImages.length < maxGalleryImages;
 
     const todayBookingsCount = bookings.filter((booking) => {
         if (!booking.startAt) return false;
@@ -128,228 +67,30 @@ function Summary({ user, onUserUpdate }) {
 
     return (
         <div className="dash-section">
-            <div className="dash-cards dash-cards--info">
-                <div className="dash-card dash-card--info">
-                    <span className="dash-card-icon dash-card-icon--store" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M3 9l1-5h16l1 5" />
-                            <path d="M3 9v11h18V9" />
-                            <path d="M9 20v-6h6v6" />
-                        </svg>
-                    </span>
-                    <div className="dash-card-text">
-                        <span className="dash-card-label">Negocio</span>
-                        <span className="dash-card-value">{user.business.name}</span>
-                    </div>
-                </div>
 
-                <div className="dash-card dash-card--info">
-                    <span className="dash-card-icon dash-card-icon--mail" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="3" y="5" width="18" height="14" rx="2" />
-                            <path d="M3 7l9 6 9-6" />
-                        </svg>
-                    </span>
-                    <div className="dash-card-text">
-                        <span className="dash-card-label">Email</span>
-                        <span className="dash-card-value">{user.business.email}</span>
-                    </div>
-                </div>
-            </div>
+            <BusinessInfoCards
+                name={user.business.name}
+                email={user.business.email}
+            />
 
-            <div className="dash-summary-actions">
-                <div className="dash-public-card">
-                    <span className="dash-public-icon" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" />
-                            <path d="M16 2v4M8 2v4M3 10h18" />
-                        </svg>
-                    </span>
-                    <div className="dash-public-content">
-                        <h3 className="dash-public-title">Tu página de reservas</h3>
-                        <p className="dash-public-desc">
-                            Comparte este enlace para que tus clientes reserven contigo
-                        </p>
-                        <a
-                            href={`/reservar/${user.business.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="dash-public-link"
-                        >
-                            {window.location.origin}/reservar/{user.business.slug}
-                        </a>
-                    </div>
-                    <a
-                        href={`/reservar/${user.business.slug}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="dash-public-btn"
-                    >
-                        Abrir mi página de reservas
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                            <path d="M15 3h6v6" />
-                            <path d="M10 14L21 3" />
-                        </svg>
-                    </a>
-                </div>
-            </div>
+            <PublicPageLink slug={user.business.slug} />
 
-            <div className="dash-stats">
-                <div className="dash-stat-card dash-stat-card--purple">
-                    <span className="dash-stat-icon" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <path d="M14 2v6h6" />
-                            <path d="M8 13h8M8 17h5" />
-                        </svg>
-                    </span>
-                    <div className="dash-stat-body">
-                        <span className="dash-stat-value">{services.length}</span>
-                        <span className="dash-stat-label">Servicios</span>
-                        <span className="dash-stat-sub">Activos</span>
-                    </div>
-                </div>
+            <SummaryStats 
+                services={services}
+                employees={employees}
+                monthBookingsCount={monthBookingsCount}
+                todayBookingsCount={todayBookingsCount}
+            />
 
-                <div className="dash-stat-card dash-stat-card--green">
-                    <span className="dash-stat-icon" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
-                    </span>
-                    <div className="dash-stat-body">
-                        <span className="dash-stat-value">{employees.length}</span>
-                        <span className="dash-stat-label">Empleados</span>
-                        <span className="dash-stat-sub">En tu equipo</span>
-                    </div>
-                </div>
-
-                <div className="dash-stat-card dash-stat-card--blue">
-                    <span className="dash-stat-icon" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" />
-                            <path d="M16 2v4M8 2v4M3 10h18" />
-                        </svg>
-                    </span>
-                    <div className="dash-stat-body">
-                        <span className="dash-stat-value">{monthBookingsCount}</span>
-                        <span className="dash-stat-label">Reservas</span>
-                        <span className="dash-stat-sub">Este mes</span>
-                    </div>
-                </div>
-
-                <div className="dash-stat-card dash-stat-card--orange">
-                    <span className="dash-stat-icon" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 6v6l4 2" />
-                        </svg>
-                    </span>
-                    <div className="dash-stat-body">
-                        <span className="dash-stat-value">{todayBookingsCount}</span>
-                        <span className="dash-stat-label">Reservas</span>
-                        <span className="dash-stat-sub">Hoy</span>
-                    </div>
-                </div>
-            </div>
-
-            <div className="dash-business-edit">
-                <h2 className="dash-section-title">Datos del negocio</h2>
-                <p className="dash-business-edit-hint">
-                    Actualiza la información que ven tus clientes en la página pública.
-                </p>
-
-                <form className="dash-business-form" onSubmit={handleEditBusiness}>
-                    <div className="dash-business-field">
-                        <label htmlFor="edit-business-name">Nombre</label>
-                        <input
-                            id="edit-business-name"
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                            minLength={2}
-                            maxLength={50}
-                        />
-                    </div>
-
-                    <div className="dash-business-field">
-                        <label htmlFor="edit-business-email">Email</label>
-                        <input
-                            id="edit-business-email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="dash-business-field">
-                        <label htmlFor="edit-business-phone">Teléfono</label>
-                        <input
-                            id="edit-business-phone"
-                            type="tel"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            placeholder="Opcional"
-                        />
-                    </div>
-
-                    <div className="dash-business-field dash-business-field--full">
-                        <label htmlFor="edit-business-address">Dirección</label>
-                        <input
-                            id="edit-business-address"
-                            type="text"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            placeholder="Opcional"
-                        />
-                    </div>
-
-                    <div className="dash-business-field">
-                        <label htmlFor="edit-business-instagram">Instagram</label>
-                        <input
-                            id="edit-business-instagram"
-                            type="url"
-                            value={instagramUrl}
-                            onChange={(e) => setInstagramUrl(e.target.value)}
-                            placeholder="https://instagram.com/tu-negocio"
-                        />
-                    </div>
-
-                    <div className="dash-business-field">
-                        <label htmlFor="edit-business-tiktok">TikTok</label>
-                        <input
-                            id="edit-business-tiktok"
-                            type="url"
-                            value={tiktokUrl}
-                            onChange={(e) => setTiktokUrl(e.target.value)}
-                            placeholder="https://tiktok.com/@tu-negocio"
-                        />
-                    </div>
-
-                    <div className="dash-business-field">
-                        <label htmlFor="edit-business-currency">Moneda</label>
-                        <select
-                            id="edit-business-currency"
-                            value={currency}
-                            onChange={(e) => setCurrency(e.target.value)}
-                            required
-                        >
-                            <option value="EUR">Euro (€)</option>
-                            <option value="PEN">Sol peruano (S/)</option>
-                            <option value="USD">Dólar (US$)</option>
-                        </select>
-                    </div>
-
-                    <div className="dash-business-actions">
-                        <button type="submit" disabled={saving}>
-                            {saving ? "Guardando..." : "Guardar cambios"}
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <BusinessEditForm
+                businessForm={businessForm}
+                setField={setField}
+                handleSubmit={handleSubmit}
+                saving={saving}
+                slug={user.business.slug}
+            />
+            {success && <p className="dash-success">{success}</p>}
+            {error && <p className="dash-error">{error}</p>}
 
             <div className="dash-images">
                 <h2 className="dash-section-title">Imágenes del negocio</h2>
@@ -372,7 +113,7 @@ function Summary({ user, onUserUpdate }) {
                             <input
                                 type="file"
                                 accept="image/jpeg,image/png,image/webp"
-                                onChange={(e) => handleUploadBusinessImage(e, "logo")}
+                                onChange={(e) => uploadImage(e.target.files[0], "logo")}
                             />
                         </label>
                     </div>
@@ -391,7 +132,7 @@ function Summary({ user, onUserUpdate }) {
                             <input
                                 type="file"
                                 accept="image/jpeg,image/png,image/webp"
-                                onChange={(e) => handleUploadBusinessImage(e, "cover")}
+                                onChange={(e) => uploadImage(e.target.files[0], "cover")}
                             />
                         </label>
                     </div>
@@ -411,18 +152,39 @@ function Summary({ user, onUserUpdate }) {
                                 type="file"
                                 accept="image/jpeg,image/png,image/webp"
                                 disabled={!canUploadGallery}
-                                onChange={(e) => handleUploadBusinessImage(e, "gallery")}
+                                onChange={(e) => uploadImage(e.target.files[0], "gallery")}
                             />
                         </label>
                     </div>
 
                     <div className="dash-gallery-grid">
-                        {galleryImages.length > 0 ? (
-                            galleryImages.map((imageUrl, index) => (
-                                <div key={`${imageUrl}-${index}`} className="dash-gallery-item">
-                                    <img src={imageUrl} alt={`Galería ${index + 1}`} />
-                                </div>
-                            ))
+                        {galleryItems.length > 0 ? (
+                            galleryItems.map((item, index) => {
+                                const imageUrl = item?.imageUrl ?? "";
+                                const imageId = item?.id ?? null;
+                                return (
+                                    <div key={`${imageId ?? imageUrl}-${index}`} className="dash-gallery-item">
+                                        <img src={imageUrl} alt={`Galería ${index + 1}`} />
+                                        <label
+                                            className={`dash-gallery-update-btn${!imageId ? " is-disabled" : ""}`}
+                                        >
+                                            Actualizar
+                                            <input
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp"
+                                                disabled={!imageId}
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    e.target.value = "";
+                                                    if (file && imageId) {
+                                                        updateGalleryImage(imageId, file);
+                                                    }
+                                                }}
+                                            />
+                                        </label>
+                                    </div>
+                                );
+                            })
                         ) : (
                             <div className="dash-gallery-empty">
                                 <span className="dash-image-placeholder">Aún no has subido imágenes a la galería</span>
@@ -432,8 +194,8 @@ function Summary({ user, onUserUpdate }) {
                 </div>
             </div>
 
-            {success && <p className="dash-success">{success}</p>}
-            {error && <p className="dash-error">{error}</p>}
+            {uploadSuccess && <p className="dash-success">{uploadSuccess}</p>}
+            {uploadError && <p className="dash-error">{uploadError}</p>}
         </div>
     );
 }
