@@ -143,7 +143,7 @@ function Summary({ user, onUserUpdate }) {
                         <div>
                             <span className="dash-image-card-label">Galería</span>
                             <p className="dash-gallery-hint">
-                                Hasta {maxGalleryImages} imágenes extra para mostrar más contenido de tu negocio.
+                                Hasta {maxGalleryImages} imágenes extra. Cada una se puede actualizar cada 30 días.
                             </p>
                         </div>
                         <label className={`dash-image-btn dash-gallery-upload-btn ${!canUploadGallery ? "dash-image-btn--disabled" : ""}`}>

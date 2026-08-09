@@ -666,9 +666,10 @@
 
 .dash-gallery-hint {
     margin: 0.35rem 0 0;
-    font-size: 0.875rem;
-    color: #64748b;
-    line-height: 1.4;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+    line-height: 1.45;
 }
 
 .dash-gallery-grid {
