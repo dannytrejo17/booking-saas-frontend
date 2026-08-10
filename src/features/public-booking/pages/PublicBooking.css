@@ -1368,3 +1368,20 @@ RESPONSIVE - MÓVIL PEQUEÑO
             repeat(2, minmax(0, 1fr));
     }
 }
+
+
+@media (max-width: 768px) {
+    .public-gallery-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .public-gallery-card {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .public-gallery-img {
+        width: 100%;
+        display: block;
+    }
+}
