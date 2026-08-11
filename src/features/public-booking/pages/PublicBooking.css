@@ -897,7 +897,7 @@ SUCCESS MESSAGE
 
 .public-success {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.75rem;
     width: 100%;
     max-width: 100%;
@@ -915,6 +915,14 @@ SUCCESS MESSAGE
     width: 22px;
     height: 22px;
     flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.public-success span {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
 }
 
 @keyframes public-fade-in {
