@@ -13,6 +13,21 @@ function getInitials(name) {
         .toUpperCase();
 }
 
+function formatBookingWhen(startAt) {
+    const when = new Date(startAt);
+    const dateLabel = when.toLocaleDateString("es-ES", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+    });
+    const timeLabel = when.toLocaleTimeString("es-ES", {
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+
+    return `${dateLabel} a las ${timeLabel}`;
+}
+
 function BookingWidget({ slug, services, employees, currency }) {
     const [serviceId, setServiceId] = useState("");
     const [employeeId, setEmployeeId] = useState("");
@@ -79,7 +94,9 @@ function BookingWidget({ slug, services, employees, currency }) {
             }
 
             await createPublicBooking(slug, bookingData);
-            setSuccess("¡Reserva confirmada! Te esperamos.");
+            setSuccess(
+                `¡Reserva confirmada! Te esperamos el ${formatBookingWhen(startAt)}.`
+            );
             setServiceId("");
             setEmployeeId("");
             setDate("");
