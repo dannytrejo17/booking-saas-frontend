@@ -7,7 +7,7 @@ import { usePublicBusiness } from "../hooks/usePublicBusiness";
 import { useAvailability } from "../hooks/useAvailability";
 import { usePublicReviews } from "../hooks/usePublicReviews";
 import PublicHero from "../components/PublicHero";
-import PublicGallery from "../components/PublicGallery";
+import PublicGallery from "../components/PublicBookingGallery";
 import PublicServices from "../components/PublicServices";
 import PublicEmployees from "../components/PublicEmployees";
 import PublicReviews from "../components/PublicReviews";
