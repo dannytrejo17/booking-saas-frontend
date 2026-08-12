@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getAvailability, createPublicBooking } from "../../../../src/features/public-booking/api";
 import { formatPrice } from "../../../../src/shared/currency";
 
@@ -41,6 +41,7 @@ function BookingWidget({ slug, services, employees, currency }) {
     const [success, setSuccess] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
+    const successRef = useRef(null);
 
     const now = new Date();
     const today = [
@@ -48,6 +49,24 @@ function BookingWidget({ slug, services, employees, currency }) {
         String(now.getMonth() + 1).padStart(2, "0"),
         String(now.getDate()).padStart(2, "0"),
     ].join("-");
+
+    useEffect(() => {
+        if (!success) return;
+
+        const active = document.activeElement;
+        if (active instanceof HTMLElement) {
+            active.blur();
+        }
+
+        const timer = window.setTimeout(() => {
+            successRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+        }, 100);
+
+        return () => window.clearTimeout(timer);
+    }, [success]);
 
     useEffect(() => {
         if (!serviceId || !employeeId || !date) {
@@ -326,17 +345,22 @@ function BookingWidget({ slug, services, employees, currency }) {
                         <button type="submit" disabled={!startAt || submitting}>
                             {submitting ? "Confirmando..." : "Confirmar reserva"}
                         </button>
+
+                        {success && (
+                            <div
+                                ref={successRef}
+                                className="public-success"
+                                role="status"
+                                tabIndex={-1}
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                    <path d="M20 6L9 17l-5-5" />
+                                </svg>
+                                <span>{success}</span>
+                            </div>
+                        )}
                     </form>
                 </div>
-
-                {success && (
-                    <div className="public-success" role="status">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M20 6L9 17l-5-5" />
-                        </svg>
-                        <span>{success}</span>
-                    </div>
-                )}
             </section>
         </div>
     );
