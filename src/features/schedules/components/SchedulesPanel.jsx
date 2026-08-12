@@ -59,7 +59,9 @@ function SchedulesPanel() {
     const [empScheduleDay, setEmpScheduleDay] = useState("");
     const [empScheduleOpen, setEmpScheduleOpen] = useState("");
     const [empScheduleClose, setEmpScheduleClose] = useState("");
-    const [error, setError] = useState("");
+    const [empScheduleError, setEmpScheduleError] = useState("");
+    const [scheduleError, setScheduleError] = useState("");
+
 
 
     useEffect(() => {
@@ -72,7 +74,7 @@ function SchedulesPanel() {
                 setSchedule(scheduleData);
                 setEmployees(employeesData);
             } catch (err) {
-                setError(err.message);
+                setScheduleError(err.message);
             }
         };
         fetchData();
@@ -82,6 +84,7 @@ function SchedulesPanel() {
     useEffect(() => {
         if (!selectedEmployeeId) {
             setEmployeeSchedule([]);
+            setEmpScheduleError("");
             return;
         }
 
@@ -89,8 +92,9 @@ function SchedulesPanel() {
             try {
                 const data = await getEmployeeSchedule(selectedEmployeeId);
                 setEmployeeSchedule(data);
+                setEmpScheduleError("");
             } catch (err) {
-                setError(err.message);
+                setEmpScheduleError(err.message);
             }
         };
         fetchEmployeeSchedule();
@@ -103,7 +107,7 @@ function SchedulesPanel() {
         e.preventDefault();
 
         if (!scheduleDay || !scheduleOpen || !scheduleClose) {
-            setError("Completa día, apertura y cierre");
+            setScheduleError("Completa día, apertura y cierre");
             return;
         }
 
@@ -119,9 +123,9 @@ function SchedulesPanel() {
             setScheduleDay("");
             setScheduleOpen("");
             setScheduleClose("");
-            setError("");
+            setScheduleError("");
         } catch (err) {
-            setError(err.message);
+            setScheduleError(err.message);
         }
     };
 
@@ -130,9 +134,9 @@ function SchedulesPanel() {
             await deleteSchedule(day);
             const data = await getSchedule();
             setSchedule(data);
-            setError("");
+            setScheduleError("");
         } catch (err) {
-            setError(err.message);
+            setScheduleError(err.message);
         }
     };
 
@@ -140,12 +144,12 @@ function SchedulesPanel() {
         e.preventDefault();
 
         if (!selectedEmployeeId) {
-            setError("Selecciona un empleado");
+            setEmpScheduleError("Selecciona un empleado");
             return;
         }
 
         if (!empScheduleDay || !empScheduleOpen || !empScheduleClose) {
-            setError("Completa día, apertura y cierre del empleado");
+            setEmpScheduleError("Completa día, apertura y cierre del empleado");
             return;
         }
 
@@ -161,9 +165,9 @@ function SchedulesPanel() {
             setEmpScheduleDay("");
             setEmpScheduleOpen("");
             setEmpScheduleClose("");
-            setError("");
+            setEmpScheduleError("");
         } catch (err) {
-            setError(err.message);
+            setEmpScheduleError(err.message);
         }
     };
 
@@ -172,9 +176,9 @@ function SchedulesPanel() {
             await deleteEmployeeSchedule(selectedEmployeeId, day);
             const data = await getEmployeeSchedule(selectedEmployeeId);
             setEmployeeSchedule(data);
-            setError("");
+            setEmpScheduleError("");
         } catch (err) {
-            setError(err.message);
+            setEmpScheduleError(err.message);
         }
     };
 
@@ -212,6 +216,12 @@ function SchedulesPanel() {
                 />
                 <button type="submit">Añadir horario</button>
             </form>
+
+            {scheduleError && (
+                <p className="dash-error" role="alert">
+                    {scheduleError}
+                </p>
+            )}
 
             {schedule.length === 0 && (
                 <p className="dash-empty">No hay horarios del negocio todavía</p>
@@ -288,6 +298,12 @@ function SchedulesPanel() {
                 <button type="submit">Añadir horario empleado</button>
             </form>
 
+            {empScheduleError && (
+                <p className="dash-error" role="alert">
+                    {empScheduleError}
+                </p>
+            )}
+
             {!selectedEmployeeId && (
                 <p className="dash-empty">Selecciona un empleado para ver o añadir horarios</p>
             )}
@@ -323,8 +339,6 @@ function SchedulesPanel() {
                         ))}
                 </div>
             )}
-
-            {error && <p className="dash-error">{error}</p>}
         </div>
     );
 }
