@@ -193,7 +193,9 @@ export default async function ReservarPage({ params }) {
                             <h2>Galería</h2>
                             <p>Conoce el negocio a través de sus imágenes.</p>
                         </div>
-                        <div className="public-gallery-grid">
+                        <div
+                            className={`public-gallery-grid${galleryImages.length === 1 ? " public-gallery-grid--single" : ""}`}
+                        >
                             {galleryImages.map((imageUrl, index) => (
                                 <div key={`${imageUrl}-${index}`} className="public-gallery-card">
                                     <img

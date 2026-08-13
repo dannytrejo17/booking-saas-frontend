@@ -10,7 +10,9 @@ function PublicGallery({ galleryImages }) {
                 <p>Imágenes del lugar para que tus clientes vean mejor el ambiente.</p>
             </div>
 
-            <div className="public-gallery-grid">
+            <div
+                className={`public-gallery-grid${galleryImages.length === 1 ? " public-gallery-grid--single" : ""}`}
+            >
                 {galleryImages.map((imageUrl, index) => (
                     <div
                         key={`${imageUrl}-${index}`}
