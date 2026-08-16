@@ -84,12 +84,11 @@ export default async function ReservarPage({ params }) {
         url: `${process.env.NEXT_PUBLIC_BASE_URL || ""}/reservar/${slug}`,
     };
 
+    const jsonLdSafe = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+
     return (
         <div className="public-page">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
+            <script type="application/ld+json">{jsonLdSafe}</script>
             <header className="public-hero">
                 <div
                     className="public-hero-bg"
